@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" font-family="monospace">
   <rect width="1000" height="640" fill="#fafafa"/>
   <text x="500" y="42" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">CyclUno deck — console layout</text>
-  <text x="500" y="66" text-anchor="middle" font-size="13" fill="#666">one-handed on the wheel, two-handed for APP mode</text>
+  <text x="500" y="66" text-anchor="middle" font-size="13" fill="#666">two-handed for APP mode</text>
 
   <!-- panel -->
   <rect x="70" y="90" width="860" height="480" rx="28" fill="#1d2733" stroke="#101820" stroke-width="3"/>
@@ -20,42 +20,6 @@
     <text x="424" y="282">A:rec  B:menu</text>
   </g>
   <text x="500" y="320" text-anchor="middle" font-size="11" fill="#8aa0b5">OLED 128x128 — 16-row aion HUD</text>
-
-  <!-- LEDs top right -->
-  <g>
-    <circle cx="800" cy="140" r="9" fill="#d94a2b"/><text x="820" y="145" font-size="11" fill="#c7d3df">REC</text>
-    <circle cx="800" cy="170" r="9" fill="#7cffb2"/><text x="820" y="175" font-size="11" fill="#c7d3df">LINK</text>
-    <circle cx="800" cy="200" r="9" fill="#5ad1ff"/><text x="820" y="205" font-size="11" fill="#c7d3df">APP (D13)</text>
-  </g>
-
-  <!-- joy1 -->
-  <circle cx="215" cy="380" r="78" fill="#0e161e" stroke="#3b4a5a" stroke-width="3"/>
-  <circle cx="215" cy="380" r="44" fill="#2c3a49" stroke="#4a5c6e" stroke-width="2"/>
-  <circle cx="215" cy="380" r="30" fill="#3b4a5a"/>
-  <text x="215" y="487" text-anchor="middle" font-size="13" font-weight="bold" fill="#c7d3df">JOY 1 · nav</text>
-  <text x="215" y="505" text-anchor="middle" font-size="11" fill="#8aa0b5">local HUD · press = A</text>
-
-  <!-- wheel -->
-  <g>
-    <circle cx="500" cy="400" r="62" fill="#0e161e" stroke="#3b4a5a" stroke-width="3"/>
-    <circle cx="500" cy="400" r="48" fill="#2c3a49" stroke="#7b4fa6" stroke-width="3"/>
-    <!-- detent ticks -->
-    <g stroke="#9d4edd" stroke-width="3">
-      <line x1="500" y1="356" x2="500" y2="366"/>
-      <line x1="531" y1="369" x2="524" y2="376"/>
-      <line x1="544" y1="400" x2="534" y2="400"/>
-      <line x1="531" y1="431" x2="524" y2="424"/>
-      <line x1="500" y1="444" x2="500" y2="434"/>
-      <line x1="469" y1="431" x2="476" y2="424"/>
-      <line x1="456" y1="400" x2="466" y2="400"/>
-      <line x1="469" y1="369" x2="476" y2="376"/>
-    </g>
-    <circle cx="500" cy="400" r="16" fill="#3b4a5a"/>
-  </g>
-  <text x="500" y="492" text-anchor="middle" font-size="13" font-weight="bold" fill="#c7d3df">WHEEL · KY-040</text>
-  <text x="500" y="510" text-anchor="middle" font-size="11" fill="#8aa0b5">scroll · click = run</text>
-
-  <!-- joy2 -->
   <circle cx="762" cy="360" r="78" fill="#0e161e" stroke="#3b4a5a" stroke-width="3"/>
   <circle cx="762" cy="360" r="44" fill="#2c3a49" stroke="#177e89" stroke-width="2"/>
   <circle cx="762" cy="360" r="30" fill="#3b4a5a"/>
@@ -81,7 +45,7 @@
 
   <!-- usage notes -->
   <g font-size="12" fill="#444">
-    <text x="100" y="600">AION: wheel scrolls the cockpit, click runs · joy2 hops workspaces · X/Y pause/cancel</text>
-    <text x="100" y="620">APP:  joy2 + face buttons become the "CyclUno Pad" gamepad · wheel keeps scrolling</text>
+    <text x="100" y="600">AION: joy2 hops workspaces · X/Y pause/cancel</text>
+    <text x="100" y="620">APP:  joy2 + face buttons become the "CyclUno Pad" gamepad</text>
   </g>
 </svg>

@@ -1,38 +1,37 @@
-// Deck — CyclUno as aion's physical console: second stick, clickable wheel
-// (KY-040 rotary encoder), extra buttons, and a mode switch.
+// Deck — CyclUno as aion's physical console: second stick, extra buttons,
+// and a mode switch.
 //
 // Two modes, toggled by the MODE button (D10):
-//   AION: joy1 + A/B drive the local HUD as before; the wheel, joy2 and the
-//         X/Y buttons are forwarded to the host as MSG_INPUT_EVENT frames —
-//         aion turns them into navigation Intents.
+//   AION: joy1 + A/B drive the local HUD as before; joy2, X/Y and the face
+//         buttons are forwarded to the host as MSG_INPUT_EVENT frames — aion
+//         turns them into navigation Intents.
 //   APP:  local HUD input is suspended; joy2 raw axes stream to the host
-//         (which exposes them as a Linux uinput gamepad, "CyclUno Pad"),
-//         every face button (A/B/X/Y/J2/WHEEL) forwards press AND release,
-//         and the wheel keeps sending steps (host maps them to scroll).
+//         (which exposes them as a Linux uinput gamepad, "CyclUno Pad"), and
+//         every face button (A/B/X/Y/J2) forwards press AND release.
 //
 // INPUT_EVENT payload (4 bytes, little-endian int16 value), kept in lockstep
 // with aion/src/aion/deck/protocol.py:
-//   src:  0 JOY1 · 1 JOY2 · 2 WHEEL · 3 BTN · 4 MODE
+//   src:  0 JOY1 · 1 JOY2 · 2 (was WHEEL) · 3 BTN · 4 MODE
 //   joy codes:   0 step-x ±1 · 1 step-y ±1 · 2 raw-x · 3 raw-y (centered)
-//   wheel codes: 0 step ±n
-//   btn codes:   0 A · 1 B · 2 J2-SW · 3 WHEEL-SW · 4 MODE · 5 X · 6 Y
+//   btn codes:   0 A · 1 B · 2 J2-SW · 3 (was WHEEL-SW) · 4 MODE · 5 X · 6 Y
 //                (val 1=down 0=up)
 //   mode codes:  0 (val 0=AION 1=APP), sent on every toggle
 //
 // Everything here is pure logic (no Arduino headers) so it is host-testable:
 // test_deck.cpp feeds pin levels / readings and asserts emitted events.
-// RAM gates: sizeof(QuadDecoder) tiny, sizeof(RawAxisStream) tiny.
+// RAM gates: sizeof(RawAxisStream) tiny.
 #pragma once
 #include <stdint.h>
 
 namespace cycluno {
 
 // ---- event enums (mirror protocol.py) ------------------------------------
+// NOTE: the wheel (src 2, btn 3) was removed; its numeric codes are left
+// unused on purpose so existing aion pairing stays byte-compatible.
 static const uint8_t SRC_JOY1 = 0, SRC_JOY2 = 1, SRC_WHEEL = 2,
                      SRC_BTN = 3, SRC_MODE = 4;
 static const uint8_t CODE_STEP_X = 0, CODE_STEP_Y = 1,
                      CODE_RAW_X = 2, CODE_RAW_Y = 3;
-static const uint8_t CODE_WHEEL_STEP = 0;
 static const uint8_t DBTN_A = 0, DBTN_B = 1, DBTN_J2 = 2, DBTN_WHEEL = 3,
                      DBTN_MODE = 4, DBTN_X = 5, DBTN_Y = 6;
 static const uint8_t MODE_AION = 0, MODE_APP = 1;
@@ -45,25 +44,6 @@ inline void pack_input_event(uint8_t src, uint8_t code, int16_t val,
     out[2] = (uint8_t)(val & 0xFF);
     out[3] = (uint8_t)((val >> 8) & 0xFF);
 }
-
-// ---- KY-040 quadrature decoder --------------------------------------------
-// Full-step decoder on the CLK edge: when CLK falls, DT tells the direction.
-// Polled or ISR-fed; feed raw pin levels, get ±1 detent steps. Robust to
-// bounce because only CLK's falling edge is acted on and DT is just sampled.
-class QuadDecoder {
-public:
-    // Feed current pin levels; returns -1 / 0 / +1 detent steps.
-    int8_t update(bool clk, bool dt) {
-        int8_t step = 0;
-        if (last_clk_ && !clk)          // falling edge of CLK = one detent
-            step = dt ? 1 : -1;         // DT high -> clockwise
-        last_clk_ = clk;
-        return step;
-    }
-
-private:
-    bool last_clk_ = true;              // idle high (module has pull-ups)
-};
 
 // ---- APP-mode raw axis streaming -------------------------------------------
 // Decides when a raw axis reading is worth a frame: on meaningful change

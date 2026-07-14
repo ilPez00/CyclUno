@@ -1,5 +1,5 @@
 // Deck host gate: event payload bytes (pinned to aion's protocol.py),
-// KY-040 quadrature decoding, APP-mode raw axis streaming, RAM budget.
+// APP-mode raw axis streaming, RAM budget.
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,33 +9,11 @@ using namespace cycluno;
 
 static void test_pack() {
     uint8_t p[4];
-    pack_input_event(SRC_WHEEL, CODE_WHEEL_STEP, -3, p);
-    // struct.pack("<BBh", 2, 0, -3) == 02 00 fd ff
-    assert(p[0] == 2 && p[1] == 0 && p[2] == 0xFD && p[3] == 0xFF);
     pack_input_event(SRC_JOY2, CODE_RAW_X, 300, p);
     assert(p[0] == 1 && p[1] == 2 && p[2] == 0x2C && p[3] == 0x01);
     pack_input_event(SRC_MODE, 0, MODE_APP, p);
     assert(p[0] == 4 && p[1] == 0 && p[2] == 1 && p[3] == 0);
     printf("PASS payload bytes match protocol.py\n");
-}
-
-static void test_quad() {
-    QuadDecoder q;
-    // idle high, no motion
-    assert(q.update(true, true) == 0);
-    // CLK falls with DT high -> clockwise detent
-    assert(q.update(false, true) == 1);
-    // held low: nothing
-    assert(q.update(false, true) == 0);
-    // CLK back high: nothing (only falling edge counts)
-    assert(q.update(true, true) == 0);
-    // CLK falls with DT low -> counter-clockwise
-    assert(q.update(false, false) == -1);
-    assert(q.update(true, false) == 0);
-    // bounce on the high level: quiet
-    assert(q.update(true, true) == 0);
-    assert(q.update(true, false) == 0);
-    printf("PASS quadrature decode\n");
 }
 
 static void test_raw_stream() {
@@ -61,16 +39,13 @@ static void test_raw_stream() {
 }
 
 static void test_ram() {
-    printf("sizeof(QuadDecoder)=%zu sizeof(RawAxisStream)=%zu\n",
-           sizeof(QuadDecoder), sizeof(RawAxisStream));
-    assert(sizeof(QuadDecoder) <= 4);
+    printf("sizeof(RawAxisStream)=%zu\n", sizeof(RawAxisStream));
     assert(sizeof(RawAxisStream) <= 16);   // host: 8-byte long + padding; AVR is smaller
     printf("PASS RAM budget\n");
 }
 
 int main() {
     test_pack();
-    test_quad();
     test_raw_stream();
     test_ram();
     printf("OK: deck logic host gate passed\n");

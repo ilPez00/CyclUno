@@ -66,7 +66,7 @@ int main() {
     assert(h.note_count() == before);
     printf("PASS garbage frames ignored\n");
 
-    // B opens MENU; wheel moves selection; A on "Notes" enters NOTES
+    // B opens MENU; joy1 moves selection; A on "Notes" enters NOTES
     for (int i = 0; i < 5; ++i) h.tick();  // let the REC toast expire first
     h.on_btn_b();
     Capture c3; h.render(c3);
@@ -78,7 +78,7 @@ int main() {
     assert(c4.rows[1][0] == '>');
     h.on_wheel(1);
     assert(h.note_sel() == 1);
-    printf("PASS menu + wheel nav\n");
+    printf("PASS menu + nav\n");
 
     // status JSON is clamped + parseable-shaped
     char st[24]; int n = h.status_json(st, sizeof(st));

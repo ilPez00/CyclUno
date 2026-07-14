@@ -5,17 +5,17 @@
 //   SH1107; legacy SSD1306 128x64 panel via the DISPLAY_* define
 //   HW-504 joystick 1 (nav):  VRy=A0, VRx=A1, SW=D4 (to GND, internal pullup)
 //   HW-504 joystick 2 (app):  VRy=A2, VRx=A3, SW=D8
-//   KY-040 rotary encoder:    CLK=D2, DT=D3 (the interrupt pins), SW=D9
+
 //   buttons: B/back=D5, MODE=D10, X=D11, Y=D12
 //   LEDs: REC=D6, link=D7, APP-mode=D13 (onboard)
 //
 // Two personalities (MODE button toggles, D13 LED shows APP):
-//   AION mode — joy1 + A/B drive the local HUD; wheel, joy2, X/Y are
+//   AION mode — joy1 + A/B drive the local HUD; joy2, X/Y are
 //     forwarded to the host as MSG_INPUT_EVENT frames (aion turns them into
-//     cockpit navigation: wheel=scroll, wheel-click=run, joy2=workspaces).
+//     cockpit navigation: joy2=workspaces).
 //   APP mode — local HUD input is suspended ("APP PAD" banner); joy2 raw
 //     axes stream to the host, every face button forwards press+release, the
-//     wheel keeps stepping. aion exposes it all as a uinput gamepad
+//     aion exposes it all as a uinput gamepad
 //     ("CyclUno Pad") that drives whatever program aion spawned.
 //
 // Link: USB serial @115200 speaking the shared v2 framing — the same frames
@@ -48,14 +48,12 @@ static U8X8_SSD1327_WS_128X128_HW_I2C u8x8(U8X8_PIN_NONE);
 #define PIN_JOY1_X A1
 #define PIN_JOY2_Y A2
 #define PIN_JOY2_X A3
-#define PIN_ENC_CLK 2
-#define PIN_ENC_DT 3
 #define PIN_BTN_A 4   // HW-504 #1 SW
 #define PIN_BTN_B 5
 #define PIN_LED_REC 6
 #define PIN_LED_LINK 7
 #define PIN_BTN_J2 8  // HW-504 #2 SW
-#define PIN_BTN_WHEEL 9
+
 #define PIN_BTN_MODE 10
 #define PIN_BTN_X 11
 #define PIN_BTN_Y 12
@@ -104,23 +102,6 @@ static void on_frame(uint8_t type, const uint8_t* p, size_t n, void*) {
     if (type == cyclops::MSG_DISPLAY_CMD || type == cyclops::MSG_NOTE) {
         hud.apply_display_cmd(tmp);
     }
-}
-
-// ---- wheel (KY-040 on the interrupt pins) ------------------------------
-// ISR applies the same rule QuadDecoder pins in the host gate: on CLK's
-// falling edge, DT high = clockwise. Steps accumulate; loop() drains them.
-static volatile int8_t wheel_acc = 0;
-
-static void wheel_isr() {
-    wheel_acc += digitalRead(PIN_ENC_DT) ? 1 : -1;
-}
-
-static int8_t take_wheel() {
-    noInterrupts();
-    int8_t w = wheel_acc;
-    wheel_acc = 0;
-    interrupts();
-    return w;
 }
 
 // ---- input ------------------------------------------------------------
@@ -179,17 +160,13 @@ void setup() {
     pinMode(PIN_BTN_A, INPUT_PULLUP);
     pinMode(PIN_BTN_B, INPUT_PULLUP);
     pinMode(PIN_BTN_J2, INPUT_PULLUP);
-    pinMode(PIN_BTN_WHEEL, INPUT_PULLUP);
     pinMode(PIN_BTN_MODE, INPUT_PULLUP);
     pinMode(PIN_BTN_X, INPUT_PULLUP);
     pinMode(PIN_BTN_Y, INPUT_PULLUP);
-    pinMode(PIN_ENC_CLK, INPUT_PULLUP);
-    pinMode(PIN_ENC_DT, INPUT_PULLUP);
     pinMode(PIN_LED_REC, OUTPUT);
     pinMode(PIN_LED_LINK, OUTPUT);
     pinMode(PIN_LED_MODE, OUTPUT);
 
-    attachInterrupt(digitalPinToInterrupt(PIN_ENC_CLK), wheel_isr, FALLING);
 
     // sticks must be at rest during boot: their reading becomes the center
     joy1_y.calibrate(joy_avg(PIN_JOY1_Y));
@@ -211,10 +188,6 @@ void loop() {
 
     bool moved = false;
     unsigned long now = millis();
-
-    // ---- wheel: aion nav in AION mode, scroll in APP mode (host decides)
-    int8_t w = take_wheel();
-    if (w) send_input(cycluno::SRC_WHEEL, cycluno::CODE_WHEEL_STEP, w);
 
     // ---- joy1 + A/B: local HUD in AION mode, gamepad buttons in APP mode
     static uint8_t stA = 0, stB = 0;
@@ -258,9 +231,8 @@ void loop() {
     }
 
     // ---- face buttons: J2 stick click, wheel click, X, Y
-    static uint8_t stJ2 = 0, stW = 0, stX = 0, stY = 0, stM = 0;
+    static uint8_t stJ2 = 0, stX = 0, stY = 0, stM = 0;
     fwd_btn(edge(PIN_BTN_J2, stJ2), cycluno::DBTN_J2);
-    fwd_btn(edge(PIN_BTN_WHEEL, stW), cycluno::DBTN_WHEEL);
     fwd_btn(edge(PIN_BTN_X, stX), cycluno::DBTN_X);
     fwd_btn(edge(PIN_BTN_Y, stY), cycluno::DBTN_Y);
 

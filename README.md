@@ -9,7 +9,7 @@ Cyclops dev unit on an Arduino Uno — deck edition. Two jobs, one breadboard:
    notes → HUD frames).
 2. **aion control deck** — the physical console for the
    [aion](https://github.com/ilPez00/aion) cockpit TUI: two sticks, a
-   clickable wheel, face buttons and a MODE switch. In AION mode the deck
+   two thumb joysticks, four face buttons, a mode switch. In AION mode the deck
    navigates the cockpit one-handed; in APP mode it becomes a Linux gamepad
    (uinput "CyclUno Pad") driving whatever program aion spawned. The OLED
    mirrors aion status. Jarvis, but with detents.
@@ -36,8 +36,8 @@ Full assembly guide — BOM, step-by-step order (each step leaves a working
 unit), rules the wiring relies on, troubleshooting: **[docs/WIRING.md](docs/WIRING.md)**.
 
 Quick pin map: OLED 128x128 (SSD1327 default / SH1107 via `-DDISPLAY_SH1107_128X128`)
-A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8 · KY-040 D2/D3+D9
-(must be the interrupt pins) · B D5 · MODE D10 · X/Y D11/D12 · LEDs D6/D7 ·
+A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8
+B D5 · MODE D10 · X/Y D11/D12 · LEDs D6/D7 ·
 APP LED D13 onboard. Everything beyond joy1 + B is optional: unwired pins
 read as unpressed (internal pullups) and the unit degrades to the original
 single-stick HUD.
@@ -47,13 +47,12 @@ single-stick HUD.
 ### Controls — AION mode (D13 off)
 Local HUD: **stick 1 up/down** scrolls · **stick 1 right / SW** = A (REC
 toggle on HOME, select in MENU) · **stick 1 left / button B** = menu/back.
-Forwarded to the aion cockpit: **wheel** = scroll · **wheel click** =
-run/activate · **stick 2** = move / switch workspace · **X** = pause ·
+Forwarded to the aion cockpit: **joy2** = navigate workspaces · X/Y pause/cancel
 **Y** = cancel · **stick 2 click** = activate.
 
 ### Controls — APP mode (MODE button, D13 on)
 The deck is a gamepad: **stick 2** = analog axes · **A/B/X/Y + both stick
-clicks + wheel click** = buttons · **wheel** = scroll. aion exposes it as a
+clicks + wheel click** = buttons · **joy2** = navigate. aion exposes it as a
 uinput device named "CyclUno Pad"; spawn a program (`run app mpv …`) and play.
 
 Keep both sticks at rest during boot — those readings become the calibrated

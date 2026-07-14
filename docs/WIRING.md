@@ -11,14 +11,14 @@
 | 1 | Arduino Uno R3 | brain-side of the cable, input polling |
 | 1 | OLED 128x128, I2C — SSD1327 (default) or SH1107 | aion status HUD, 16x16 text grid |
 | 2 | HW-504 joystick module | joy1 = nav (left hand), joy2 = app (right hand) |
-| 1 | KY-040 rotary encoder module | the wheel: scroll + click |
 | 4 | 6x6 mm push button | B (back), MODE, X, Y |
 | 2 | LED + 220 Ω resistor | REC, LINK |
 | — | breadboard + jumper wires | power rails, everything to GND |
 
-Everything beyond joy1 + button B is **optional**: unwired pins read as
-unpressed (internal pullups) and the unit degrades to the original
-single-stick HUD.
+The rotary encoder (KY-040 "wheel") that earlier revisions wired to D2/D3/D9
+has been **removed** — navigation is now joystick-only. Everything beyond
+joy1 + button B is **optional**: unwired pins read as unpressed (internal
+pullups) and the unit degrades to the original single-stick HUD.
 
 ## Pin map (single source of truth: `src/main.cpp`)
 
@@ -29,8 +29,6 @@ single-stick HUD.
 | Joy1 SW (= button A) | D4 | active low, pullup |
 | Joy2 VRy / VRx | A2 / A3 | app stick |
 | Joy2 SW | D8 | stick click |
-| KY-040 CLK / DT | **D2 / D3** | the Uno's only interrupt pins — the wheel owns them |
-| KY-040 SW | D9 | wheel click |
 | Button B | D5 | back / menu |
 | Button MODE | D10 | AION ⇄ APP toggle |
 | Button X / Y | D11 / D12 | pause / cancel (AION), pad west/north (APP) |
@@ -41,18 +39,15 @@ single-stick HUD.
 ## Per-pin fan-out (direct wiring, no breadboard)
 
 Every signal pin carries exactly **one** wire; only 5 V and GND branch.
-17 signal wires + the power tree, 21–27 wires total depending on chaining.
+15 signal wires + the power tree, 19–25 wires total depending on chaining.
 
 | Uno pin | wires out | destination |
 |---------|-----------|-------------|
-| D2 | 1 | KY-040 CLK |
-| D3 | 1 | KY-040 DT |
 | D4 | 1 | HW-504 #1 SW |
 | D5 | 1 | button B |
 | D6 | 1 | REC LED anode |
 | D7 | 1 | LINK LED anode |
 | D8 | 1 | HW-504 #2 SW |
-| D9 | 1 | KY-040 SW |
 | D10 | 1 | button MODE |
 | D11 | 1 | button X |
 | D12 | 1 | button Y |
@@ -63,25 +58,25 @@ Every signal pin carries exactly **one** wire; only 5 V and GND branch.
 | A3 | 1 | HW-504 #2 VRx |
 | A4 | 1 | OLED SDA |
 | A5 | 1 | OLED SCL |
-| **5V** | 1 socket, **4 loads** | OLED VCC · joy1 +5V · joy2 +5V · KY-040 + |
+| **5V** | 1 socket, **3 loads** | OLED VCC · joy1 +5V · joy2 +5V |
 | **GND** | 3 sockets, **10 returns** | see split below |
 
 **5 V**: the Uno header has a single 5V socket. Run one wire to a splice
-(solder joint, Wago, or a chain) and branch 4 ways from there — or
-daisy-chain module-to-module: `5V → joy1 → joy2 → KY-040 → OLED`.
+(solder joint, Wago, or a chain) and branch 3 ways from there — or
+daisy-chain module-to-module: `5V → joy1 → joy2 → OLED`.
 
 **GND**: the Uno has 3 GND sockets (two on the power header, one on the
 digital header next to D13). 10 things need a return; a sane split:
 
 | GND socket | chain |
 |------------|-------|
-| power #1 | joy1 GND → joy2 GND → KY-040 GND → OLED GND (module chain) |
+| power #1 | joy1 GND → joy2 GND → OLED GND (module chain) |
 | power #2 | button B → MODE → X → Y (one wire hopping leg-to-leg) |
 | digital (by D13) | REC resistor → LINK resistor |
 
-**No extra GND for the clicks**: HW-504 SW and KY-040 SW switch against
-their own module's GND pin internally — the module GND wire already
-carries them. Only the 4 standalone push buttons need a GND leg.
+**No extra GND for the clicks**: HW-504 SW switch against their own module's
+GND pin internally — the module GND wire already carries them. Only the 4
+standalone push buttons need a GND leg.
 
 ### I2C notes (the OLED pair)
 
@@ -112,16 +107,12 @@ carries them. Only the 4 standalone push buttons need a GND leg.
    PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X64  make flash   # legacy panel
    ```
 
-   The target panel is 128x128 (16-row x 16-col text grid). The HUD is
-   built for it; the legacy 128x64 build clips to its top 8 rows.
 3. **Joy1.** VCC/GND → rails, VRy → A0, VRx → A1, SW → D4. Stick scrolls,
    press toggles REC.
 4. **Button B** D5 → GND. Menu/back works.
 5. **LEDs.** D6 → LED → 220 Ω → GND (REC), same for D7 (LINK).
-6. **Wheel.** KY-040 + → 5 V rail, GND → − rail, CLK → D2, DT → D3,
-   SW → D9. Detents arrive over serial as INPUT_EVENT frames.
-7. **Joy2.** VCC/GND → rails, VRy → A2, VRx → A3, SW → D8.
-8. **Buttons MODE/X/Y.** D10/D11/D12, each to GND. MODE toggles the D13 LED.
+6. **Joy2.** VCC/GND → rails, VRy → A2, VRx → A3, SW → D8.
+7. **Buttons MODE/X/Y.** D10/D11/D12, each to GND. MODE toggles the D13 LED.
 
 ## Rules the wiring relies on
 
@@ -129,10 +120,6 @@ carries them. Only the 4 standalone push buttons need a GND leg.
   `INPUT_PULLUP`, no external resistors.
 - **Sticks at rest during boot**: the first readings become the calibrated
   centers (joy nav *and* the APP-mode raw stream).
-- **KY-040 must be on D2/D3.** The wheel is read by a falling-edge interrupt
-  on CLK; on any other pins it will skip detents.
-- The KY-040 module's onboard pullups want **+ wired to 5 V**, otherwise
-  CLK/DT float.
 
 ## Smoke test
 
@@ -142,9 +129,9 @@ make build    # AVR compile gate (RAM stays ~56%)
 make flash
 ```
 
-Then from the aion repo: `pip install -e ".[deck]"` and start `aion` — the
-header shows `[DECK]`, the OLED starts mirroring aion status, the wheel
-scrolls the cockpit. Press MODE (`[PAD]` in the header) and
+Then from the aion repo: `pip install -e \".[deck]\"` and start `aion` — the
+header shows `[DECK]`, the OLED starts mirroring aion status, joy2 moves the
+cockpit. Press MODE (`[PAD]` in the header) and
 `cat /proc/bus/input/devices | grep -A4 CyclUno` shows the gamepad.
 
 ## Troubleshooting
@@ -152,8 +139,6 @@ scrolls the cockpit. Press MODE (`[PAD]` in the header) and
 | Symptom | Fix |
 |---------|-----|
 | a stick direction is mirrored | set `JOY_FLIP_X` / `JOY_FLIP_Y` in `src/main.cpp` |
-| wheel turns the wrong way | swap the CLK and DT jumpers |
-| wheel double-steps per detent | some KY-040 clones detent on both edges — change the ISR to `CHANGE` and halve in software, or live with 2× |
 | OLED dark | wrong controller: rebuild with the other `DISPLAY_*` define; else try addr 0x3D; check A4/A5 not swapped |
 | OLED garbled / offset pixels | SSD1327 firmware on an SH1107 panel (or vice versa) — switch the define |
 | ghost button presses | missing GND leg — every button must return to the − rail |

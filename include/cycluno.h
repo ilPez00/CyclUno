@@ -3,7 +3,7 @@
 // The full cyclops::Hud is ~1.9 KB of state; an ATmega328P has 2 KB of SRAM
 // total, which is why the original Arduino target was retired. CyclUno is the
 // same product idea at Uno scale: a handful of glanceable notes, a banner, a
-// toast, wheel+two-button navigation, REC state — and nothing else.
+// toast, two-button navigation, REC state — and nothing else.
 //
 //   sizeof(UnoHud) is gated < 400 bytes by test_cycluno.cpp.
 //

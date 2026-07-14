@@ -105,22 +105,7 @@
   <!-- button B (wire 570) -->
   <rect x="120" y="560" width="320" height="26" rx="6" fill="#eef6ee" stroke="#5a8a5a" stroke-width="2"/>
   <text x="134" y="577" font-size="12" fill="#333">[ B ]    leg1  W4  ·  leg2→chain C</text>
-  <line x1="440" y1="570" x2="560" y2="570" stroke="#5a8a5a" stroke-width="3"/>
-
-  <!-- KY-040 (silkscreen order CLK DT SW + GND) -->
-  <rect x="120" y="612" width="320" height="140" rx="8" fill="#f3ecfa" stroke="#7b4fa6" stroke-width="2"/>
-  <g font-size="12" fill="#333">
-    <text x="134" y="634">CLK   W1 → D2 (interrupt)</text>
-    <text x="134" y="664">DT    W2 → D3 (interrupt)</text>
-    <text x="134" y="694">SW    W8 → D9  wheel click</text>
-    <text x="134" y="718">+     → chain B   GND → chain A</text>
-  </g>
-  <text x="134" y="742" font-size="11" font-weight="bold" fill="#5b3480">KY-040 wheel — silkscreen: CLK DT SW + GND</text>
-  <!-- CLK 630 -> D2 660, DT 660 -> D3 630 (small crossing) -->
-  <path d="M 440 630 H 496 V 660 H 560" fill="none" stroke="#7b2cbf" stroke-width="3"/>
-  <path d="M 440 660 H 472 V 630 H 560" fill="none" stroke="#9d4edd" stroke-width="3"/>
-  <!-- SW 690 -> up channel x=516 -> D9 450 -->
-  <path d="M 440 690 H 516 V 450 H 560" fill="none" stroke="#c77dff" stroke-width="3"/>
+  <line x1="440" y1="420" x2="560" y2="420" stroke="#8ac926" stroke-width="3"/>
 
   <!-- ================= RIGHT modules ================= -->
 
@@ -164,15 +149,14 @@
   <g font-size="11" font-weight="bold">
     <text x="700" y="834" fill="#3a6ea5">W3 (J1 SW → D4)</text>
     <text x="700" y="878" fill="#177e89">W7 (J2 SW → D8)</text>
-    <text x="470" y="444" fill="#c77dff">W8</text>
   </g>
 
   <!-- ================= legend ================= -->
   <rect x="120" y="900" width="1200" height="96" rx="8" fill="#f0f0f0" stroke="#ccc"/>
   <g font-size="12" fill="#333">
-    <text x="140" y="926" font-weight="bold">17 signal wires — W1..W17 (see the wire list in WIRING.md for lengths/colors):</text>
-    <text x="140" y="950">W1 D2-CLK · W2 D3-DT · W3 D4-J1SW · W4 D5-B · W5 D6-REC · W6 D7-LINK · W7 D8-J2SW · W8 D9-KYSW · W9 D10-MODE</text>
-    <text x="140" y="972">W10 D11-X · W11 D12-Y · W12 A0-J1VRy · W13 A1-J1VRx · W14 A2-J2VRy · W15 A3-J2VRx · W16 A4-SDA · W17 A5-SCL</text>
+    <text x="140" y="926" font-weight="bold">15 signal wires — W1..W15 (see the wire list in WIRING.md for lengths/colors):</text>
+    <text x="140" y="950">W1 D4-J1SW · W2 D5-B · W3 D6-REC · W4 D7-LINK · W5 D8-J2SW · W6 D10-MODE</text>
+    <text x="140" y="972">W7 D11-X · W8 D12-Y · W9 A0-J1VRy · W10 A1-J1VRx · W11 A2-J2VRy · W12 A3-J2VRx · W13 A4-SDA · W14 A5-SCL</text>
     <text x="1180" y="950" fill="#666">dashed = long route</text>
     <text x="1180" y="972" fill="#666">power → sheet 2</text>
   </g>
