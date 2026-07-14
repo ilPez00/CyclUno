@@ -21,6 +21,8 @@ test:
 	$(OUT)/test_cycluno
 	$(CXX) $(CXXFLAGS) $(INC) test/test_joynav.cpp -o $(OUT)/test_joynav
 	$(OUT)/test_joynav
+	$(CXX) $(CXXFLAGS) $(INC) test/test_deck.cpp -o $(OUT)/test_deck
+	$(OUT)/test_deck
 
 pio-check:
 	@command -v pio >/dev/null 2>&1 || { \
