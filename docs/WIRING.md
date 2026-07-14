@@ -38,6 +38,51 @@ single-stick HUD.
 | LINK LED | D7 | via 220 Ω to GND |
 | APP-mode LED | D13 | onboard — nothing to wire |
 
+## Per-pin fan-out (direct wiring, no breadboard)
+
+Every signal pin carries exactly **one** wire; only 5 V and GND branch.
+17 signal wires + the power tree, 21–27 wires total depending on chaining.
+
+| Uno pin | wires out | destination |
+|---------|-----------|-------------|
+| D2 | 1 | KY-040 CLK |
+| D3 | 1 | KY-040 DT |
+| D4 | 1 | HW-504 #1 SW |
+| D5 | 1 | button B |
+| D6 | 1 | REC LED anode |
+| D7 | 1 | LINK LED anode |
+| D8 | 1 | HW-504 #2 SW |
+| D9 | 1 | KY-040 SW |
+| D10 | 1 | button MODE |
+| D11 | 1 | button X |
+| D12 | 1 | button Y |
+| D13 | 0 | onboard LED — nothing to wire |
+| A0 | 1 | HW-504 #1 VRy |
+| A1 | 1 | HW-504 #1 VRx |
+| A2 | 1 | HW-504 #2 VRy |
+| A3 | 1 | HW-504 #2 VRx |
+| A4 | 1 | OLED SDA |
+| A5 | 1 | OLED SCL |
+| **5V** | 1 socket, **4 loads** | OLED VCC · joy1 +5V · joy2 +5V · KY-040 + |
+| **GND** | 3 sockets, **10 returns** | see split below |
+
+**5 V**: the Uno header has a single 5V socket. Run one wire to a splice
+(solder joint, Wago, or a chain) and branch 4 ways from there — or
+daisy-chain module-to-module: `5V → joy1 → joy2 → KY-040 → OLED`.
+
+**GND**: the Uno has 3 GND sockets (two on the power header, one on the
+digital header next to D13). 10 things need a return; a sane split:
+
+| GND socket | chain |
+|------------|-------|
+| power #1 | joy1 GND → joy2 GND → KY-040 GND → OLED GND (module chain) |
+| power #2 | button B → MODE → X → Y (one wire hopping leg-to-leg) |
+| digital (by D13) | REC resistor → LINK resistor |
+
+**No extra GND for the clicks**: HW-504 SW and KY-040 SW switch against
+their own module's GND pin internally — the module GND wire already
+carries them. Only the 4 standalone push buttons need a GND leg.
+
 ## Assembly order (each step leaves a working unit)
 
 1. **Power rails.** Uno 5V → breadboard + rail, Uno GND → − rail.
