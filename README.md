@@ -29,24 +29,19 @@ Wire protocol: `include/cyclops_shared.h` (kept in sync with cyclops
   upstream unchanged, because the wire protocol is shared.
 
 ## Wiring
-| Part | Pin |
-|------|-----|
-| OLED SSD1306 (I2C, 0x3C) | SDA=A4, SCL=A5, VCC=5V, GND |
-| HW-504 #1 (nav) VRy / VRx | A0 / A1 (VCC=5V, GND) |
-| HW-504 #1 SW / button A | D4 (to GND, internal pullup) |
-| HW-504 #2 (app) VRy / VRx | A2 / A3 |
-| HW-504 #2 SW | D8 |
-| KY-040 encoder CLK / DT | D2 / D3 (the interrupt pins) |
-| KY-040 SW (wheel click) | D9 |
-| Button B (menu/back) | D5 (to GND, internal pullup) |
-| Button MODE (AION ↔ APP) | D10 |
-| Button X / Y | D11 / D12 |
-| REC LED (+resistor) | D6 |
-| Link LED (+resistor) | D7 |
-| APP-mode LED | D13 (onboard) |
 
-Everything beyond joy1 + B is optional: unwired pins read as unpressed
-(internal pullups) and the unit degrades to the original single-stick HUD.
+![deck wiring](docs/img/deck-wiring.svg)
+
+Full assembly guide — BOM, step-by-step order (each step leaves a working
+unit), rules the wiring relies on, troubleshooting: **[docs/WIRING.md](docs/WIRING.md)**.
+
+Quick pin map: OLED A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8 · KY-040 D2/D3+D9
+(must be the interrupt pins) · B D5 · MODE D10 · X/Y D11/D12 · LEDs D6/D7 ·
+APP LED D13 onboard. Everything beyond joy1 + B is optional: unwired pins
+read as unpressed (internal pullups) and the unit degrades to the original
+single-stick HUD.
+
+![console layout](docs/img/deck-layout.svg)
 
 ### Controls — AION mode (D13 off)
 Local HUD: **stick 1 up/down** scrolls · **stick 1 right / SW** = A (REC
