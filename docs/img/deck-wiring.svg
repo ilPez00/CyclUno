@@ -1,151 +1,179 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="800" viewBox="0 0 1150 800" font-family="monospace">
-  <rect width="1150" height="800" fill="#fafafa"/>
-  <text x="575" y="46" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">CyclUno deck — wiring</text>
-  <text x="575" y="72" text-anchor="middle" font-size="13" fill="#666">all buttons close to GND (internal pullups) · both joystick VCC to 5 V rail · crossings without dots are not joined</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1020" viewBox="0 0 1400 1020" font-family="monospace">
+  <rect width="1400" height="1020" fill="#fafafa"/>
+  <text x="700" y="44" text-anchor="middle" font-size="24" font-weight="bold" fill="#222">CyclUno deck — sheet 1/2: SIGNAL wiring (W1–W17)</text>
+  <text x="700" y="70" text-anchor="middle" font-size="13" fill="#666">every Uno pin shown · one wire per signal · power + GND wires are on sheet 2 · crossings without dots are not joined</text>
 
   <!-- ================= Arduino Uno ================= -->
-  <rect x="460" y="120" width="240" height="540" rx="10" fill="#0f7391" stroke="#0a5468" stroke-width="2"/>
-  <text x="580" y="148" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Arduino Uno R3</text>
-  <text x="580" y="640" text-anchor="middle" font-size="11" fill="#bfe3ee">USB → host (115200, v2 frames)</text>
+  <rect x="560" y="140" width="280" height="620" rx="10" fill="#0f7391" stroke="#0a5468" stroke-width="2"/>
+  <text x="700" y="170" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">Arduino Uno R3</text>
+  <text x="700" y="742" text-anchor="middle" font-size="11" fill="#bfe3ee">USB → host (115200, v2 frames)</text>
 
-  <!-- left (digital) pin labels, baseline = wire y + 4 -->
+  <!-- left header labels (digital side, physical order) -->
   <g font-size="12" fill="#fff">
-    <text x="472" y="164">D13</text><text x="472" y="204">D12</text>
-    <text x="472" y="244">D11</text><text x="472" y="284">D10</text>
-    <text x="472" y="324">D9</text><text x="472" y="364">D8</text>
-    <text x="472" y="404">D7</text><text x="472" y="444">D6</text>
-    <text x="472" y="484">D5</text><text x="472" y="524">D4</text>
-    <text x="472" y="564">D3</text><text x="472" y="604">D2</text>
+    <text x="572" y="214">SCL</text><text x="572" y="244">SDA</text>
+    <text x="572" y="274">AREF</text><text x="572" y="304">GND</text>
+    <text x="572" y="334">D13</text><text x="572" y="364">D12</text>
+    <text x="572" y="394">D11</text><text x="572" y="424">D10</text>
+    <text x="572" y="454">D9</text><text x="572" y="484">D8</text>
+    <text x="572" y="514">D7</text><text x="572" y="544">D6</text>
+    <text x="572" y="574">D5</text><text x="572" y="604">D4</text>
+    <text x="572" y="634">D3</text><text x="572" y="664">D2</text>
+    <text x="572" y="694">D1 TX</text><text x="572" y="724">D0 RX</text>
   </g>
-  <!-- right (power + analog) pin labels -->
+  <!-- right header labels (power + analog, physical order) -->
   <g font-size="12" fill="#fff" text-anchor="end">
-    <text x="688" y="164">5V</text><text x="688" y="204">GND</text>
-    <text x="688" y="284">A0</text><text x="688" y="324">A1</text>
-    <text x="688" y="364">A2</text><text x="688" y="404">A3</text>
-    <text x="688" y="444">A4 SDA</text><text x="688" y="484">A5 SCL</text>
+    <text x="828" y="214">IOREF</text><text x="828" y="244">RESET</text>
+    <text x="828" y="274">3V3</text><text x="828" y="304">5V</text>
+    <text x="828" y="334">GND</text><text x="828" y="364">GND</text>
+    <text x="828" y="394">VIN</text>
+    <text x="828" y="454">A0</text><text x="828" y="484">A1</text>
+    <text x="828" y="514">A2</text><text x="828" y="544">A3</text>
+    <text x="828" y="574">A4</text><text x="828" y="604">A5</text>
   </g>
   <!-- pin dots -->
   <g fill="#0a5468">
-    <circle cx="460" cy="160" r="4"/><circle cx="460" cy="200" r="4"/>
-    <circle cx="460" cy="240" r="4"/><circle cx="460" cy="280" r="4"/>
-    <circle cx="460" cy="320" r="4"/><circle cx="460" cy="360" r="4"/>
-    <circle cx="460" cy="400" r="4"/><circle cx="460" cy="440" r="4"/>
-    <circle cx="460" cy="480" r="4"/><circle cx="460" cy="520" r="4"/>
-    <circle cx="460" cy="560" r="4"/><circle cx="460" cy="600" r="4"/>
-    <circle cx="700" cy="160" r="4"/><circle cx="700" cy="200" r="4"/>
-    <circle cx="700" cy="280" r="4"/><circle cx="700" cy="320" r="4"/>
-    <circle cx="700" cy="360" r="4"/><circle cx="700" cy="400" r="4"/>
-    <circle cx="700" cy="440" r="4"/><circle cx="700" cy="480" r="4"/>
+    <circle cx="560" cy="210" r="4"/><circle cx="560" cy="240" r="4"/>
+    <circle cx="560" cy="270" r="4"/><circle cx="560" cy="300" r="4"/>
+    <circle cx="560" cy="330" r="4"/><circle cx="560" cy="360" r="4"/>
+    <circle cx="560" cy="390" r="4"/><circle cx="560" cy="420" r="4"/>
+    <circle cx="560" cy="450" r="4"/><circle cx="560" cy="480" r="4"/>
+    <circle cx="560" cy="510" r="4"/><circle cx="560" cy="540" r="4"/>
+    <circle cx="560" cy="570" r="4"/><circle cx="560" cy="600" r="4"/>
+    <circle cx="560" cy="630" r="4"/><circle cx="560" cy="660" r="4"/>
+    <circle cx="560" cy="690" r="4"/><circle cx="560" cy="720" r="4"/>
+    <circle cx="840" cy="210" r="4"/><circle cx="840" cy="240" r="4"/>
+    <circle cx="840" cy="270" r="4"/><circle cx="840" cy="300" r="4"/>
+    <circle cx="840" cy="330" r="4"/><circle cx="840" cy="360" r="4"/>
+    <circle cx="840" cy="390" r="4"/>
+    <circle cx="840" cy="450" r="4"/><circle cx="840" cy="480" r="4"/>
+    <circle cx="840" cy="510" r="4"/><circle cx="840" cy="540" r="4"/>
+    <circle cx="840" cy="570" r="4"/><circle cx="840" cy="600" r="4"/>
   </g>
 
-  <!-- ================= LEFT: digital side ================= -->
+  <!-- unused / special pin notes -->
+  <g font-size="11" fill="#999">
+    <text x="530" y="214" text-anchor="end">= A5 dup, leave free —</text>
+    <text x="530" y="244" text-anchor="end">= A4 dup, leave free —</text>
+    <text x="530" y="274" text-anchor="end">unused —</text>
+    <text x="530" y="694" text-anchor="end">USB serial, keep free —</text>
+    <text x="530" y="724" text-anchor="end">USB serial, keep free —</text>
+    <text x="875" y="214">— unused</text>
+    <text x="875" y="244">— unused</text>
+    <text x="875" y="274">— unused</text>
+    <text x="875" y="394">— unused</text>
+  </g>
+
+  <!-- GND / power tags pointing at sheet 2 -->
+  <rect x="230" y="288" width="300" height="26" rx="6" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="380" y="305" text-anchor="middle" font-size="11" fill="#333">GND — chain C start (sheet 2)</text>
+  <line x1="530" y1="300" x2="560" y2="300" stroke="#333" stroke-width="2" stroke-dasharray="5,4"/>
+  <rect x="920" y="288" width="300" height="26" rx="6" fill="none" stroke="#b02e2e" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="1070" y="305" text-anchor="middle" font-size="11" fill="#b02e2e">5V — chain B start (sheet 2)</text>
+  <line x1="860" y1="300" x2="920" y2="300" stroke="#d62828" stroke-width="2" stroke-dasharray="5,4"/>
+  <rect x="920" y="318" width="300" height="26" rx="6" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="1070" y="335" text-anchor="middle" font-size="11" fill="#333">GND — chain A start (sheet 2)</text>
+  <line x1="860" y1="330" x2="920" y2="330" stroke="#333" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="875" y="364" font-size="11" fill="#999">— spare GND</text>
 
   <!-- D13 note -->
-  <rect x="150" y="146" width="180" height="28" rx="6" fill="none" stroke="#999" stroke-dasharray="5,4"/>
-  <text x="240" y="164" text-anchor="middle" font-size="11" fill="#666">D13 onboard LED = APP mode</text>
-  <line x1="330" y1="160" x2="460" y2="160" stroke="#999" stroke-width="2" stroke-dasharray="5,4"/>
+  <rect x="290" y="318" width="240" height="26" rx="6" fill="none" stroke="#999" stroke-dasharray="5,4"/>
+  <text x="410" y="335" text-anchor="middle" font-size="11" fill="#666">D13 onboard LED = APP mode</text>
+  <line x1="530" y1="330" x2="560" y2="330" stroke="#999" stroke-width="2" stroke-dasharray="5,4"/>
 
-  <!-- push buttons Y X MODE (wires 200/240/280) -->
-  <rect x="60" y="186" width="270" height="126" rx="8" fill="#eef6ee" stroke="#5a8a5a" stroke-width="2"/>
+  <!-- ================= LEFT modules ================= -->
+
+  <!-- buttons Y X MODE (wires 360/390/420) -->
+  <rect x="120" y="346" width="320" height="92" rx="8" fill="#eef6ee" stroke="#5a8a5a" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="76" y="204">[ Y ]   cancel · pad north</text>
-    <text x="76" y="244">[ X ]   pause  · pad west</text>
-    <text x="76" y="284">[MODE]  AION ⇄ APP</text>
+    <text x="134" y="364">[ Y ]    leg1  W11 ·  leg2→chain C</text>
+    <text x="134" y="394">[ X ]    leg1  W10 ·  leg2→chain C</text>
+    <text x="134" y="424">[MODE]   leg1  W9  ·  leg2→chain C</text>
   </g>
-  <text x="76" y="304" font-size="11" font-weight="bold" fill="#396039">push buttons — other leg to GND</text>
-  <line x1="330" y1="200" x2="460" y2="200" stroke="#2a9d3f" stroke-width="3"/>
-  <line x1="330" y1="240" x2="460" y2="240" stroke="#55b552" stroke-width="3"/>
-  <line x1="330" y1="280" x2="460" y2="280" stroke="#8ac926" stroke-width="3"/>
+  <line x1="440" y1="360" x2="560" y2="360" stroke="#2a9d3f" stroke-width="3"/>
+  <line x1="440" y1="390" x2="560" y2="390" stroke="#55b552" stroke-width="3"/>
+  <line x1="440" y1="420" x2="560" y2="420" stroke="#8ac926" stroke-width="3"/>
 
-  <!-- J2 SW tag (wire 360) -->
-  <rect x="185" y="346" width="145" height="28" rx="6" fill="#e8f4f4" stroke="#177e89" stroke-width="2" stroke-dasharray="5,4"/>
-  <text x="257" y="364" text-anchor="middle" font-size="11" fill="#177e89">HW-504 #2 SW</text>
-  <line x1="330" y1="360" x2="460" y2="360" stroke="#177e89" stroke-width="3"/>
-
-  <!-- LEDs (wires 400/440) -->
-  <rect x="60" y="388" width="270" height="82" rx="8" fill="#fdf3e7" stroke="#c77b30" stroke-width="2"/>
+  <!-- LEDs (wires 510/540) -->
+  <rect x="120" y="494" width="320" height="64" rx="8" fill="#fdf3e7" stroke="#c77b30" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="76" y="404">● LINK   frames alive</text>
-    <text x="76" y="444">● REC    cyclops HUD</text>
+    <text x="134" y="514">LINK LED  anode W6 · cathode→220Ω→C</text>
+    <text x="134" y="544">REC LED   anode W5 · cathode→220Ω→C</text>
   </g>
-  <text x="76" y="462" font-size="11" font-weight="bold" fill="#8a5420">anode to pin · 220 Ω to GND</text>
-  <line x1="330" y1="400" x2="460" y2="400" stroke="#f9a03f" stroke-width="3"/>
-  <line x1="330" y1="440" x2="460" y2="440" stroke="#d94a2b" stroke-width="3"/>
+  <line x1="440" y1="510" x2="560" y2="510" stroke="#f9a03f" stroke-width="3"/>
+  <line x1="440" y1="540" x2="560" y2="540" stroke="#d94a2b" stroke-width="3"/>
 
-  <!-- button B (wire 480) -->
-  <rect x="150" y="472" width="180" height="26" rx="6" fill="#eef6ee" stroke="#5a8a5a" stroke-width="2"/>
-  <text x="240" y="489" text-anchor="middle" font-size="11" fill="#396039">[ B ] back — to GND</text>
-  <line x1="330" y1="480" x2="460" y2="480" stroke="#5a8a5a" stroke-width="3"/>
+  <!-- button B (wire 570) -->
+  <rect x="120" y="560" width="320" height="26" rx="6" fill="#eef6ee" stroke="#5a8a5a" stroke-width="2"/>
+  <text x="134" y="577" font-size="12" fill="#333">[ B ]    leg1  W4  ·  leg2→chain C</text>
+  <line x1="440" y1="570" x2="560" y2="570" stroke="#5a8a5a" stroke-width="3"/>
 
-  <!-- J1 SW tag (wire 520) -->
-  <rect x="185" y="506" width="145" height="28" rx="6" fill="#eaf0fa" stroke="#3a6ea5" stroke-width="2" stroke-dasharray="5,4"/>
-  <text x="257" y="524" text-anchor="middle" font-size="11" fill="#3a6ea5">HW-504 #1 SW (A)</text>
-  <line x1="330" y1="520" x2="460" y2="520" stroke="#3a6ea5" stroke-width="3"/>
-
-  <!-- KY-040 (wires DT 560, CLK 600, SW routed from 640) -->
-  <rect x="60" y="544" width="270" height="120" rx="8" fill="#f3ecfa" stroke="#7b4fa6" stroke-width="2"/>
+  <!-- KY-040 (silkscreen order CLK DT SW + GND) -->
+  <rect x="120" y="612" width="320" height="140" rx="8" fill="#f3ecfa" stroke="#7b4fa6" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="76" y="564">DT</text>
-    <text x="76" y="604">CLK    interrupt pins!</text>
-    <text x="76" y="644">SW     wheel click</text>
+    <text x="134" y="634">CLK   W1 → D2 (interrupt)</text>
+    <text x="134" y="664">DT    W2 → D3 (interrupt)</text>
+    <text x="134" y="694">SW    W8 → D9  wheel click</text>
+    <text x="134" y="718">+     → chain B   GND → chain A</text>
   </g>
-  <text x="76" y="659" font-size="11" font-weight="bold" fill="#5b3480">KY-040 wheel — + → 5 V · GND → GND</text>
-  <line x1="330" y1="560" x2="460" y2="560" stroke="#9d4edd" stroke-width="3"/>
-  <line x1="330" y1="600" x2="460" y2="600" stroke="#7b2cbf" stroke-width="3"/>
-  <path d="M 330 640 H 395 V 320 H 460" fill="none" stroke="#c77dff" stroke-width="3"/>
+  <text x="134" y="742" font-size="11" font-weight="bold" fill="#5b3480">KY-040 wheel — silkscreen: CLK DT SW + GND</text>
+  <!-- CLK 630 -> D2 660, DT 660 -> D3 630 (small crossing) -->
+  <path d="M 440 630 H 496 V 660 H 560" fill="none" stroke="#7b2cbf" stroke-width="3"/>
+  <path d="M 440 660 H 472 V 630 H 560" fill="none" stroke="#9d4edd" stroke-width="3"/>
+  <!-- SW 690 -> up channel x=516 -> D9 450 -->
+  <path d="M 440 690 H 516 V 450 H 560" fill="none" stroke="#c77dff" stroke-width="3"/>
 
-  <!-- ================= RIGHT: power + analog side ================= -->
+  <!-- ================= RIGHT modules ================= -->
 
-  <!-- power rails (wires 160/200) -->
-  <rect x="830" y="140" width="270" height="86" rx="8" fill="#fdeaea" stroke="#b02e2e" stroke-width="2"/>
-  <text x="846" y="164" font-size="12" fill="#b02e2e">+5 V  ══════════════</text>
-  <text x="846" y="204" font-size="12" fill="#333">GND   ══════════════</text>
-  <text x="846" y="220" font-size="10" fill="#8a1f1f">rails feed every module + buttons + LEDs</text>
-  <line x1="720" y1="160" x2="830" y2="160" stroke="#d62828" stroke-width="4"/>
-  <line x1="720" y1="200" x2="830" y2="200" stroke="#333333" stroke-width="4"/>
-
-  <!-- HW-504 #1 (wires 280/320) -->
-  <rect x="830" y="262" width="270" height="90" rx="8" fill="#eaf0fa" stroke="#3a6ea5" stroke-width="2"/>
+  <!-- HW-504 #1 (A0 450 / A1 480 straight, SW routed) -->
+  <rect x="960" y="420" width="360" height="112" rx="8" fill="#eaf0fa" stroke="#3a6ea5" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="846" y="284">VRy    scroll HUD</text>
-    <text x="846" y="324">VRx    A / B flicks</text>
+    <text x="974" y="454">VRy   W12 → A0   scroll HUD</text>
+    <text x="974" y="484">VRx   W13 → A1   A / B flicks</text>
+    <text x="974" y="509">SW    W3  → D4   button A</text>
   </g>
-  <text x="846" y="340" font-size="11" font-weight="bold" fill="#274c77">HW-504 #1 nav · SW→D4 · 5V/GND→rails</text>
-  <line x1="720" y1="280" x2="830" y2="280" stroke="#3a6ea5" stroke-width="3"/>
-  <line x1="720" y1="320" x2="830" y2="320" stroke="#6096ba" stroke-width="3"/>
+  <text x="974" y="526" font-size="11" font-weight="bold" fill="#274c77">HW-504 #1 nav — silkscreen: GND +5V VRx VRy SW · pwr → chains A/B</text>
+  <line x1="860" y1="450" x2="960" y2="450" stroke="#3a6ea5" stroke-width="3"/>
+  <line x1="860" y1="480" x2="960" y2="480" stroke="#6096ba" stroke-width="3"/>
+  <!-- J1 SW: 505 -> down x=934 -> bottom y=840 -> left x=544 -> up to 600 -> D4 -->
+  <path d="M 960 505 H 934 V 840 H 544 V 600 H 560" fill="none" stroke="#3a6ea5" stroke-width="3" stroke-dasharray="8,5"/>
 
-  <!-- HW-504 #2 (wires 360/400) -->
-  <rect x="830" y="354" width="270" height="88" rx="8" fill="#e8f4f4" stroke="#177e89" stroke-width="2"/>
+  <!-- HW-504 #2 (elbows to A2 510 / A3 540) -->
+  <rect x="960" y="560" width="360" height="112" rx="8" fill="#e8f4f4" stroke="#177e89" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="846" y="364">VRy    pad Y axis</text>
-    <text x="846" y="404">VRx    pad X axis</text>
+    <text x="974" y="589">VRy   W14 → A2   pad Y axis</text>
+    <text x="974" y="619">VRx   W15 → A3   pad X axis</text>
+    <text x="974" y="644">SW    W7  → D8   stick click</text>
   </g>
-  <text x="846" y="430" font-size="11" font-weight="bold" fill="#0f5e66">HW-504 #2 app · SW→D8 · 5V/GND→rails</text>
-  <line x1="720" y1="360" x2="830" y2="360" stroke="#177e89" stroke-width="3"/>
-  <line x1="720" y1="400" x2="830" y2="400" stroke="#4cb8c4" stroke-width="3"/>
+  <text x="974" y="662" font-size="11" font-weight="bold" fill="#0f5e66">HW-504 #2 app — silkscreen: GND +5V VRx VRy SW · pwr → chains A/B</text>
+  <path d="M 960 585 H 918 V 510 H 860" fill="none" stroke="#177e89" stroke-width="3"/>
+  <path d="M 960 615 H 902 V 540 H 860" fill="none" stroke="#4cb8c4" stroke-width="3"/>
+  <!-- J2 SW: 640 -> down x=950 -> bottom y=860 -> left x=528 -> up to 480 -> D8 -->
+  <path d="M 960 640 H 950 V 860 H 528 V 480 H 560" fill="none" stroke="#177e89" stroke-width="3" stroke-dasharray="8,5"/>
 
-  <!-- OLED (wires jog 440->492, 480->528) -->
-  <rect x="830" y="452" width="270" height="94" rx="8" fill="#fef7e6" stroke="#c9a227" stroke-width="2"/>
-  <text x="846" y="472" font-size="11" font-weight="bold" fill="#8a6d1a">OLED 128x128 — I2C addr 0x3C</text>
+  <!-- OLED (elbows to A4 570 / A5 600) -->
+  <rect x="960" y="690" width="360" height="100" rx="8" fill="#fef7e6" stroke="#c9a227" stroke-width="2"/>
   <g font-size="12" fill="#333">
-    <text x="846" y="496">SDA    aion status HUD</text>
-    <text x="846" y="532">SCL    SSD1327 / SH1107</text>
+    <text x="974" y="719">SDA   W16 → A4</text>
+    <text x="974" y="749">SCL   W17 → A5</text>
   </g>
-  <path d="M 720 440 H 800 V 492 H 830" fill="none" stroke="#e9c46a" stroke-width="3"/>
-  <path d="M 720 480 H 785 V 528 H 830" fill="none" stroke="#f4a261" stroke-width="3"/>
+  <text x="974" y="774" font-size="11" font-weight="bold" fill="#8a6d1a">OLED 128x128 SSD1327/SH1107 — I2C 0x3C · VCC/GND → chains B/A · check silkscreen order!</text>
+  <path d="M 960 715 H 886 V 570 H 860" fill="none" stroke="#e9c46a" stroke-width="3"/>
+  <path d="M 960 745 H 870 V 600 H 860" fill="none" stroke="#f4a261" stroke-width="3"/>
+
+  <!-- wire number labels on the long routed nets -->
+  <g font-size="11" font-weight="bold">
+    <text x="700" y="834" fill="#3a6ea5">W3 (J1 SW → D4)</text>
+    <text x="700" y="878" fill="#177e89">W7 (J2 SW → D8)</text>
+    <text x="470" y="444" fill="#c77dff">W8</text>
+  </g>
 
   <!-- ================= legend ================= -->
-  <rect x="60" y="700" width="1040" height="70" rx="8" fill="#f0f0f0" stroke="#ccc"/>
+  <rect x="120" y="900" width="1200" height="96" rx="8" fill="#f0f0f0" stroke="#ccc"/>
   <g font-size="12" fill="#333">
-    <rect x="80" y="716" width="26" height="5" fill="#d62828"/><text x="112" y="725">5 V</text>
-    <rect x="80" y="740" width="26" height="5" fill="#333333"/><text x="112" y="749">GND</text>
-    <rect x="180" y="716" width="26" height="5" fill="#3a6ea5"/><text x="212" y="725">joystick 1 (nav)</text>
-    <rect x="180" y="740" width="26" height="5" fill="#177e89"/><text x="212" y="749">joystick 2 (app)</text>
-    <rect x="380" y="716" width="26" height="5" fill="#7b2cbf"/><text x="412" y="725">KY-040 wheel</text>
-    <rect x="380" y="740" width="26" height="5" fill="#2a9d3f"/><text x="412" y="749">buttons (to GND)</text>
-    <rect x="580" y="716" width="26" height="5" fill="#f9a03f"/><text x="612" y="725">LEDs (220 Ω)</text>
-    <rect x="580" y="740" width="26" height="5" fill="#e9c46a"/><text x="612" y="749">I2C (OLED)</text>
-    <text x="790" y="725" fill="#666">dashed = same net, drawn apart</text>
-    <text x="790" y="749" fill="#666">everything optional except joy1 + B</text>
+    <text x="140" y="926" font-weight="bold">17 signal wires — W1..W17 (see the wire list in WIRING.md for lengths/colors):</text>
+    <text x="140" y="950">W1 D2-CLK · W2 D3-DT · W3 D4-J1SW · W4 D5-B · W5 D6-REC · W6 D7-LINK · W7 D8-J2SW · W8 D9-KYSW · W9 D10-MODE</text>
+    <text x="140" y="972">W10 D11-X · W11 D12-Y · W12 A0-J1VRy · W13 A1-J1VRx · W14 A2-J2VRy · W15 A3-J2VRx · W16 A4-SDA · W17 A5-SCL</text>
+    <text x="1180" y="950" fill="#666">dashed = long route</text>
+    <text x="1180" y="972" fill="#666">power → sheet 2</text>
   </g>
 </svg>

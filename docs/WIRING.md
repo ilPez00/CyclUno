@@ -107,14 +107,13 @@ carries them. Only the 4 standalone push buttons need a GND leg.
    128x128; other panels are one build flag away:
 
    ```bash
-   make flash                                                # SSD1327 128x128
+   make flash                                                # SSD1327 128x128 (default)
    PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SH1107_128X128  make flash
-   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X64  make flash   # legacy panels
-   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X32  make flash
+   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X64  make flash   # legacy panel
    ```
 
-   The HUD is a 16-row x 16-col text grid; smaller panels just clip to
-   their top rows.
+   The target panel is 128x128 (16-row x 16-col text grid). The HUD is
+   built for it; the legacy 128x64 build clips to its top 8 rows.
 3. **Joy1.** VCC/GND → rails, VRy → A0, VRx → A1, SW → D4. Stick scrolls,
    press toggles REC.
 4. **Button B** D5 → GND. Menu/back works.

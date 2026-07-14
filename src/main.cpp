@@ -2,7 +2,7 @@
 //
 // Hardware:
 //   OLED 128x128, I2C (A4=SDA A5=SCL, addr 0x3C) — SSD1327 (default) or
-//   SH1107; legacy SSD1306 128x64/32 panels via the DISPLAY_* defines
+//   SH1107; legacy SSD1306 128x64 panel via the DISPLAY_* define
 //   HW-504 joystick 1 (nav):  VRy=A0, VRx=A1, SW=D4 (to GND, internal pullup)
 //   HW-504 joystick 2 (app):  VRy=A2, VRx=A3, SW=D8
 //   KY-040 rotary encoder:    CLK=D2, DT=D3 (the interrupt pins), SW=D9
@@ -34,14 +34,12 @@
 
 // ---- display selection --------------------------------------------------
 // 128x128 I2C OLEDs come with two controllers; pick yours (or override with
-// a -D build flag). Legacy 128x64/32 SSD1306 panels still work: the HUD
-// simply clips to the top rows.
+// a -D build flag). Legacy 128x64 SSD1306 panels still work: the HUD
+// simply clips to the top 8 rows.
 #if defined(DISPLAY_SH1107_128X128)
 static U8X8_SH1107_128X128_HW_I2C u8x8(U8X8_PIN_NONE);
 #elif defined(DISPLAY_SSD1306_128X64)
 static U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(U8X8_PIN_NONE);
-#elif defined(DISPLAY_SSD1306_128X32)
-static U8X8_SSD1306_128X32_UNIVISION_HW_I2C u8x8(U8X8_PIN_NONE);
 #else  // default: Waveshare-style SSD1327 128x128
 static U8X8_SSD1327_WS_128X128_HW_I2C u8x8(U8X8_PIN_NONE);
 #endif
