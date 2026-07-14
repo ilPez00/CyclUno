@@ -83,6 +83,22 @@ digital header next to D13). 10 things need a return; a sane split:
 their own module's GND pin internally — the module GND wire already
 carries them. Only the 4 standalone push buttons need a GND leg.
 
+### I2C notes (the OLED pair)
+
+- Exactly **2 signal wires**: A4 → SDA, A5 → SCL (plus VCC/GND from the
+  power chain). No resistors to add: SSD1306 modules carry their own
+  pull-ups to VCC.
+- On an Uno R3 the two sockets labeled **SDA/SCL next to AREF are the same
+  net as A4/A5** — use whichever is handier, they are not extra pins. And
+  since I2C owns them, A4/A5 are not available as analog inputs.
+- The firmware runs the bus at **400 kHz** (`Wire.setClock(400000L)`):
+  keep the SDA/SCL pair short (< ~25 cm) and routed together, away from
+  the joystick analog lines. Longer run needed? Drop to 100 kHz
+  (`Wire.setClock(100000L)` in `src/main.cpp`).
+- I2C is a **bus**: future devices (e.g. the MCP23017 button expander from
+  the upgrade notes) piggyback on the *same two wires* in parallel — new
+  address, zero new Uno pins. Just don't duplicate address 0x3C.
+
 ## Assembly order (each step leaves a working unit)
 
 1. **Power rails.** Uno 5V → breadboard + rail, Uno GND → − rail.
