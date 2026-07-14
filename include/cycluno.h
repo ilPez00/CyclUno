@@ -18,9 +18,9 @@
 
 namespace cycluno {
 
-static const uint8_t ROWS = 4;        // SSD1306 128x32-equivalent text rows
-static const uint8_t COLS = 21;       // 128 px / 6 px font
-static const uint8_t MAX_NOTES = 4;
+static const uint8_t ROWS = 16;       // 128x128 OLED, 8x8 font -> 16 text rows
+static const uint8_t COLS = 16;       // 128 px / 8 px font
+static const uint8_t MAX_NOTES = 12;
 static const uint8_t NOTE_LEN = COLS; // one row per note
 
 // Actions emitted to the brain (mirror of the hud.h ACT ids used remotely).
@@ -129,6 +129,8 @@ public:
     }
 
     // ---- render ----------------------------------------------------------
+    // Writes EVERY row on each render (unwritten rows would go stale on the
+    // real OLED now that the 128x128 panel has 16 of them).
     void render(RowSink& sink) const {
         char line[COLS + 2];  // marker char + full-width text + NUL
         // row 0: mode + rec dot (+ toast overlay wins)
@@ -140,25 +142,34 @@ public:
         }
         switch (mode_) {
             case HOME:
+                // 1: banner · 2..ROWS-2: recent notes · last row: hints
                 sink.row(1, banner_[0] ? banner_ : "CyclUno ready");
-                sink.row(2, note_count_ ? notes_[0] : "");
-                sink.row(3, "A:rec  B:menu");
+                for (uint8_t r = 2; r < ROWS - 1; ++r) {
+                    uint8_t idx = (uint8_t)(r - 2);
+                    sink.row(r, idx < note_count_ ? notes_[idx] : "");
+                }
+                sink.row(ROWS - 1, "A:rec  B:menu");
                 break;
             case NOTES:
-                for (uint8_t r = 0; r < 3; ++r) {
-                    uint8_t idx = (uint8_t)(note_sel_ + r);
+                for (uint8_t r = 1; r < ROWS; ++r) {
+                    uint8_t idx = (uint8_t)(note_sel_ + r - 1);
                     if (idx < note_count_) {
-                        snprintf(line, sizeof(line), "%c%s", r == 0 ? '>' : ' ', notes_[idx]);
-                        sink.row(1 + r, line);
+                        snprintf(line, sizeof(line), "%c%s", r == 1 ? '>' : ' ', notes_[idx]);
+                        sink.row(r, line);
                     } else {
-                        sink.row(1 + r, r == 0 && !note_count_ ? "(no notes)" : "");
+                        sink.row(r, r == 1 && !note_count_ ? "(no notes)" : "");
                     }
                 }
                 break;
             case MENU:
-                for (uint8_t r = 0; r < MENU_N; ++r) {
-                    snprintf(line, sizeof(line), "%c%s", r == menu_sel_ ? '>' : ' ', MENU_ITEMS[r]);
-                    sink.row(1 + r, line);
+                for (uint8_t r = 1; r < ROWS; ++r) {
+                    uint8_t i = (uint8_t)(r - 1);
+                    if (i < MENU_N) {
+                        snprintf(line, sizeof(line), "%c%s", i == menu_sel_ ? '>' : ' ', MENU_ITEMS[i]);
+                        sink.row(r, line);
+                    } else {
+                        sink.row(r, "");
+                    }
                 }
                 break;
         }

@@ -1,7 +1,8 @@
 // CyclUno — Cyclops dev unit on an Arduino Uno, deck edition.
 //
 // Hardware:
-//   OLED SSD1306 128x32 or 128x64, I2C (A4=SDA A5=SCL, addr 0x3C)
+//   OLED 128x128, I2C (A4=SDA A5=SCL, addr 0x3C) — SSD1327 (default) or
+//   SH1107; legacy SSD1306 128x64/32 panels via the DISPLAY_* defines
 //   HW-504 joystick 1 (nav):  VRy=A0, VRx=A1, SW=D4 (to GND, internal pullup)
 //   HW-504 joystick 2 (app):  VRy=A2, VRx=A3, SW=D8
 //   KY-040 rotary encoder:    CLK=D2, DT=D3 (the interrupt pins), SW=D9
@@ -25,13 +26,25 @@
 // RAM: UnoHud 160 B, FrameDecoder 262 B, 4x JoyAxis + 2x RawAxisStream +
 // QuadDecoder < 60 B — comfortably inside the ATmega328P's 2 KB.
 #include <Arduino.h>
-#include <Wire.h>
-#include "SSD1306Ascii.h"
-#include "SSD1306AsciiWire.h"
+#include <U8x8lib.h>
 #include "cyclops_shared.h"
 #include "cycluno.h"
 #include "joynav.h"
 #include "deck.h"
+
+// ---- display selection --------------------------------------------------
+// 128x128 I2C OLEDs come with two controllers; pick yours (or override with
+// a -D build flag). Legacy 128x64/32 SSD1306 panels still work: the HUD
+// simply clips to the top rows.
+#if defined(DISPLAY_SH1107_128X128)
+static U8X8_SH1107_128X128_HW_I2C u8x8(U8X8_PIN_NONE);
+#elif defined(DISPLAY_SSD1306_128X64)
+static U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8(U8X8_PIN_NONE);
+#elif defined(DISPLAY_SSD1306_128X32)
+static U8X8_SSD1306_128X32_UNIVISION_HW_I2C u8x8(U8X8_PIN_NONE);
+#else  // default: Waveshare-style SSD1327 128x128
+static U8X8_SSD1327_WS_128X128_HW_I2C u8x8(U8X8_PIN_NONE);
+#endif
 
 #define PIN_JOY1_Y A0
 #define PIN_JOY1_X A1
@@ -55,7 +68,6 @@
 #define JOY_FLIP_Y 0
 #define JOY_FLIP_X 0
 
-static SSD1306AsciiWire oled;
 static cycluno::UnoHud hud;
 static cycluno::JoyAxis joy1_y, joy1_x, joy2_y, joy2_x;
 static cycluno::RawAxisStream raw2_x, raw2_y;
@@ -142,11 +154,16 @@ static void set_mode(bool app) {
 }
 
 // ---- render sink -------------------------------------------------------
+// u8x8 draws 8x8 tiles, no framebuffer (2 KB RAM discipline preserved).
+// Rows are padded to full width so leftovers never linger.
 struct OledSink : cycluno::RowSink {
     void row(uint8_t idx, const char* text) override {
-        oled.setCursor(0, idx);   // one text row per display row
-        oled.print(text);
-        oled.clearToEOL();
+        char line[cycluno::COLS + 1];
+        uint8_t i = 0;
+        while (text[i] && i < cycluno::COLS) { line[i] = text[i]; ++i; }
+        while (i < cycluno::COLS) line[i++] = ' ';
+        line[cycluno::COLS] = 0;
+        u8x8.drawString(0, idx, line);
     }
 };
 static OledSink sink;
@@ -155,11 +172,11 @@ static void rec_led(bool on) { digitalWrite(PIN_LED_REC, on ? HIGH : LOW); }
 
 void setup() {
     Serial.begin(115200);
-    Wire.begin();
-    Wire.setClock(400000L);
-    oled.begin(&Adafruit128x32, OLED_ADDR);  // 128x64 works too: rows 0..3 used
-    oled.setFont(System5x7);
-    oled.clear();
+    u8x8.setI2CAddress(OLED_ADDR << 1);  // u8x8 wants the 8-bit form
+    u8x8.begin();
+    u8x8.setBusClock(400000L);
+    u8x8.setFont(u8x8_font_chroma48medium8_r);
+    u8x8.clear();
 
     pinMode(PIN_BTN_A, INPUT_PULLUP);
     pinMode(PIN_BTN_B, INPUT_PULLUP);

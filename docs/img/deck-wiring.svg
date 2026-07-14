@@ -126,10 +126,10 @@
 
   <!-- OLED (wires jog 440->492, 480->528) -->
   <rect x="830" y="452" width="270" height="94" rx="8" fill="#fef7e6" stroke="#c9a227" stroke-width="2"/>
-  <text x="846" y="472" font-size="11" font-weight="bold" fill="#8a6d1a">OLED SSD1306 — I2C addr 0x3C</text>
+  <text x="846" y="472" font-size="11" font-weight="bold" fill="#8a6d1a">OLED 128x128 — I2C addr 0x3C</text>
   <g font-size="12" fill="#333">
     <text x="846" y="496">SDA    aion status HUD</text>
-    <text x="846" y="532">SCL    128x32 or 128x64</text>
+    <text x="846" y="532">SCL    SSD1327 / SH1107</text>
   </g>
   <path d="M 720 440 H 800 V 492 H 830" fill="none" stroke="#e9c46a" stroke-width="3"/>
   <path d="M 720 480 H 785 V 528 H 830" fill="none" stroke="#f4a261" stroke-width="3"/>

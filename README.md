@@ -35,7 +35,8 @@ Wire protocol: `include/cyclops_shared.h` (kept in sync with cyclops
 Full assembly guide — BOM, step-by-step order (each step leaves a working
 unit), rules the wiring relies on, troubleshooting: **[docs/WIRING.md](docs/WIRING.md)**.
 
-Quick pin map: OLED A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8 · KY-040 D2/D3+D9
+Quick pin map: OLED 128x128 (SSD1327 default / SH1107 via `-DDISPLAY_SH1107_128X128`)
+A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8 · KY-040 D2/D3+D9
 (must be the interrupt pins) · B D5 · MODE D10 · X/Y D11/D12 · LEDs D6/D7 ·
 APP LED D13 onboard. Everything beyond joy1 + B is optional: unwired pins
 read as unpressed (internal pullups) and the unit degrades to the original

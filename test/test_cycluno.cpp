@@ -31,7 +31,7 @@ int main() {
     Capture c0; h.render(c0);
     assert(strstr(c0.rows[0], "HOME"));
     assert(strstr(c0.rows[1], "CyclUno ready"));
-    assert(strstr(c0.rows[3], "A:rec"));
+    assert(strstr(c0.rows[ROWS - 1], "A:rec"));
     printf("PASS home screen\n");
 
     // A on HOME toggles REC: cmd sent, led on, toast overlay
@@ -48,13 +48,15 @@ int main() {
     h.apply_display_cmd("{\"text\":\"first note\"}");
     h.apply_display_cmd("{\"kind\":1,\"data\":\"second note\"}");
     assert(h.note_count() == 2);
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < MAX_NOTES + 2; ++i) {
         char buf[48]; snprintf(buf, sizeof(buf), "{\"text\":\"note %d\"}", i);
         h.apply_display_cmd(buf);
     }
     assert(h.note_count() == MAX_NOTES);   // capped
     Capture c2; h.render(c2);
-    assert(strstr(c2.rows[1], "note 5"));  // newest is the HOME banner line
+    char newest[24]; snprintf(newest, sizeof(newest), "note %d", MAX_NOTES + 1);
+    assert(strstr(c2.rows[1], newest));    // newest is the HOME banner line
+    assert(strstr(c2.rows[2], newest));    // ...and tops the HOME note list
     printf("PASS notes ring (newest first, capped at %d)\n", MAX_NOTES);
 
     // garbage JSON must be ignored, not crash or add junk

@@ -9,7 +9,7 @@
 | Qty | Part | Role |
 |-----|------|------|
 | 1 | Arduino Uno R3 | brain-side of the cable, input polling |
-| 1 | OLED SSD1306, I2C, 128x32 or 128x64 | aion status HUD |
+| 1 | OLED 128x128, I2C — SSD1327 (default) or SH1107 | aion status HUD, 16x16 text grid |
 | 2 | HW-504 joystick module | joy1 = nav (left hand), joy2 = app (right hand) |
 | 1 | KY-040 rotary encoder module | the wheel: scroll + click |
 | 4 | 6x6 mm push button | B (back), MODE, X, Y |
@@ -24,7 +24,7 @@ single-stick HUD.
 
 | Signal | Uno pin | Notes |
 |--------|---------|-------|
-| OLED SDA / SCL | A4 / A5 | I2C addr **0x3C** (some boards: 0x3D — change `OLED_ADDR`) |
+| OLED SDA / SCL | A4 / A5 | I2C addr **0x3C** (some boards: 0x3D — change `OLED_ADDR`); controller via `DISPLAY_*` define, see below |
 | Joy1 VRy / VRx | A0 / A1 | nav stick |
 | Joy1 SW (= button A) | D4 | active low, pullup |
 | Joy2 VRy / VRx | A2 / A3 | app stick |
@@ -86,7 +86,7 @@ carries them. Only the 4 standalone push buttons need a GND leg.
 ### I2C notes (the OLED pair)
 
 - Exactly **2 signal wires**: A4 → SDA, A5 → SCL (plus VCC/GND from the
-  power chain). No resistors to add: SSD1306 modules carry their own
+  power chain). No resistors to add: these OLED modules carry their own
   pull-ups to VCC.
 - On an Uno R3 the two sockets labeled **SDA/SCL next to AREF are the same
   net as A4/A5** — use whichever is handier, they are not extra pins. And
@@ -103,7 +103,18 @@ carries them. Only the 4 standalone push buttons need a GND leg.
 
 1. **Power rails.** Uno 5V → breadboard + rail, Uno GND → − rail.
 2. **OLED.** VCC/GND → rails, SDA → A4, SCL → A5. Flash (`make flash`):
-   the HUD boots to "CyclUno ready".
+   the HUD boots to "CyclUno ready". The default build drives an SSD1327
+   128x128; other panels are one build flag away:
+
+   ```bash
+   make flash                                                # SSD1327 128x128
+   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SH1107_128X128  make flash
+   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X64  make flash   # legacy panels
+   PLATFORMIO_BUILD_FLAGS=-DDISPLAY_SSD1306_128X32  make flash
+   ```
+
+   The HUD is a 16-row x 16-col text grid; smaller panels just clip to
+   their top rows.
 3. **Joy1.** VCC/GND → rails, VRy → A0, VRx → A1, SW → D4. Stick scrolls,
    press toggles REC.
 4. **Button B** D5 → GND. Menu/back works.
@@ -144,6 +155,7 @@ scrolls the cockpit. Press MODE (`[PAD]` in the header) and
 | a stick direction is mirrored | set `JOY_FLIP_X` / `JOY_FLIP_Y` in `src/main.cpp` |
 | wheel turns the wrong way | swap the CLK and DT jumpers |
 | wheel double-steps per detent | some KY-040 clones detent on both edges — change the ISR to `CHANGE` and halve in software, or live with 2× |
-| OLED dark | try addr 0x3D; check A4/A5 not swapped |
+| OLED dark | wrong controller: rebuild with the other `DISPLAY_*` define; else try addr 0x3D; check A4/A5 not swapped |
+| OLED garbled / offset pixels | SSD1327 firmware on an SH1107 panel (or vice versa) — switch the define |
 | ghost button presses | missing GND leg — every button must return to the − rail |
 | APP mode does nothing on the host | `/dev/uinput` permission: `sudo usermod -aG input $USER`, re-login |
