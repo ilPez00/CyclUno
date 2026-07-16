@@ -67,8 +67,13 @@ is prototyped.
 |-----|------|-------|
 | v0.1 |矩形 slab, OLED+stick+button holes | built, saved |
 | v0.2 | slab + 4 standoffs + screw-on lid | built, committed (14bae91) |
-| v0.3 | TIER B: raked sticks + MODE rocker slot + rounded grip | NEXT |
-| v0.4 | TIER A: Palm Deck contour (offset sticks, diamond buttons, detent) | planned |
+| v0.3 | TIER B slab: raked sticks + MODE slot + rounded grip (coordinate-placed, NOT ergo-derived) | built, committed (ae5e340) — DEV ENCLOSURE, not final form |
+| v0.4 | TIER A Palm Deck — layout DERIVED from hand envelope (thumb-pad centers, sight-line OLED, detent MODE) | built, committed — hand metrics are AVG (parameterize w/ real) |
+
+> **Honesty note (v0.3):** the cutouts are coordinate-placed against a rectangle, not
+> derived from thumb-reach. It protects the breadboard and proves the cutout *set*,
+> but it is NOT ergonomic. v0.4 must derive hole positions from a palm-grip
+> envelope, not from `makeBox` guesses.
 
 ## 7. Open fits to verify (before print)
 
