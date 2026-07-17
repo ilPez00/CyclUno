@@ -1,8 +1,6 @@
 # CyclUno deck — SPI 128×128 TFT assembly & wiring
 
-CyclUno now targets the connected display: a **128×128 SPI TFT**, assumed to be the common **1.44-inch ST7735** module. The exposed `RES`, `DC`, `CS`, and `BL` pins mean this is not the former I2C OLED design. The sketch uses hardware SPI and `Adafruit_ST7735`.
-
-> Controller check: firmware is for ST7735 128×128. If its PCB/flex says ST7789, ILI9163, or another controller, pause before flashing: the wiring is similar but initialization needs adjustment.
+CyclUno targets the connected display: a **confirmed 128×128 SPI TFT with an ST7735 controller** (common 1.44-inch module). Its exposed `RES`, `DC`, `CS`, and `BL` pins mean this is not the former I2C OLED design. The sketch uses hardware SPI and `Adafruit_ST7735`.
 
 ## Critical electrical rule
 

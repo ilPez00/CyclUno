@@ -35,7 +35,7 @@ Wire protocol: `include/cyclops_shared.h` (kept in sync with cyclops
 Full assembly guide — BOM, step-by-step order (each step leaves a working
 unit), rules the wiring relies on, troubleshooting: **[docs/WIRING.md](docs/WIRING.md)**.
 
-Quick pin map: 128×128 SPI TFT (ST7735 1.44 in default)
+Quick pin map: confirmed 128×128 SPI TFT (ST7735, 1.44 in)
 TFT D11 MOSI/SDA · D13 SCK/SCL · D10 CS · D9 DC · RES→3.3V via 10k · BL→3.3V/VCC per module
 joy1 A0/A1+D4 · joy2 A2/A3+D8 · B D5 · MODE D2 · X D3 · Y D12 · LEDs D6/D7 ·
 APP LED A4 (external; D13 is now TFT clock). Everything beyond joy1 + B is optional: unwired pins
