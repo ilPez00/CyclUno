@@ -95,7 +95,7 @@ static unsigned long last_rx_ms = 0;
 
 static void on_frame(uint8_t type, const uint8_t* p, size_t n, void*) {
     last_rx_ms = millis();
-    char tmp[64];  // HUD rows hold 16 chars; clamp the JSON payload hard
+    char tmp[64];  // HUD rows hold 21 chars; clamp the JSON payload hard
     if (n >= sizeof(tmp)) n = sizeof(tmp) - 1;
     memcpy(tmp, p, n); tmp[n] = 0;
     if (type == cyclops::MSG_DISPLAY_CMD || type == cyclops::MSG_NOTE) {
