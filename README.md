@@ -3,7 +3,7 @@
 Cyclops dev unit on an Arduino Uno — deck edition. Two jobs, one breadboard:
 
 1. **Cyclops dev unit** — the wearable product at breadboard scale: joystick
-   + buttons + OLED + LEDs, wired to the brain over USB serial. No WiFi/BT —
+   + buttons + SPI TFT + LEDs, wired to the brain over USB serial. No WiFi/BT —
    the cable substitutes the radio while exercising the exact same v2 frame
    protocol and the exact same brain pipeline (transcriber → extractor →
    notes → HUD frames).
@@ -11,7 +11,7 @@ Cyclops dev unit on an Arduino Uno — deck edition. Two jobs, one breadboard:
    [aion](https://github.com/ilPez00/aion) cockpit TUI: two sticks, a
    two thumb joysticks, four face buttons, a mode switch. In AION mode the deck
    navigates the cockpit one-handed; in APP mode it becomes a Linux gamepad
-   (uinput "CyclUno Pad") driving whatever program aion spawned. The OLED
+   (uinput "CyclUno Pad") driving whatever program aion spawned. The SPI TFT
    mirrors aion status. Jarvis, but with detents.
 
 The cyclops brain side (SerialLink, `demo_cycluno.py`, bash TUI) lives in the
@@ -35,10 +35,10 @@ Wire protocol: `include/cyclops_shared.h` (kept in sync with cyclops
 Full assembly guide — BOM, step-by-step order (each step leaves a working
 unit), rules the wiring relies on, troubleshooting: **[docs/WIRING.md](docs/WIRING.md)**.
 
-Quick pin map: OLED 128x128 (SSD1327 default / SH1107 via `-DDISPLAY_SH1107_128X128`)
-A4/A5 · joy1 A0/A1+D4 · joy2 A2/A3+D8
-B D5 · MODE D10 · X/Y D11/D12 · LEDs D6/D7 ·
-APP LED D13 onboard. Everything beyond joy1 + B is optional: unwired pins
+Quick pin map: 128×128 SPI TFT (ST7735 1.44 in default)
+TFT D11 MOSI/SDA · D13 SCK/SCL · D10 CS · D9 DC · RES→3.3V via 10k · BL→3.3V/VCC per module
+joy1 A0/A1+D4 · joy2 A2/A3+D8 · B D5 · MODE D2 · X D3 · Y D12 · LEDs D6/D7 ·
+APP LED A4 (external; D13 is now TFT clock). Everything beyond joy1 + B is optional: unwired pins
 read as unpressed (internal pullups) and the unit degrades to the original
 single-stick HUD.
 
@@ -73,4 +73,4 @@ python3 demo_cycluno.py       # auto-picks /dev/ttyACM*|ttyUSB*
 ```
 Press **A** on the unit: the driver "transcribes" the next prerecorded take
 through the real pipeline and streams the extracted notes back as NOTE frames
-onto the OLED.
+onto the SPI TFT.
