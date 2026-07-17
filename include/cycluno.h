@@ -19,8 +19,7 @@
 namespace cycluno {
 
 static const uint8_t ROWS = 16;       // 128x128 TFT, 8 px rows -> 16 text rows
-static const uint8_t COLS = 16;       // GFX font is 6 px wide: 16 cols = 96 px
-                                      // (21 cols would fit; kept 16 for RAM)
+static const uint8_t COLS = 21;       // GFX font is 6 px wide: 21 cols = 126 px
 static const uint8_t MAX_NOTES = 12;
 static const uint8_t NOTE_LEN = COLS; // one row per note
 

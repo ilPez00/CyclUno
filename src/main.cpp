@@ -131,7 +131,7 @@ static void set_mode(bool app) {
 }
 
 // ---- render sink -------------------------------------------------------
-// GFX built-in font is 6x8. The 16-column x 16-row HUD occupies 96x128 px.
+// GFX built-in font is 6x8. The 21-column x 16-row HUD occupies 126x128 px.
 struct TftSink : cycluno::RowSink {
     void row(uint8_t idx, const char* text) override {
         char line[cycluno::COLS + 1];

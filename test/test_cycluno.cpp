@@ -59,6 +59,12 @@ int main() {
     assert(strstr(c2.rows[2], newest));    // ...and tops the HOME note list
     printf("PASS notes ring (newest first, capped at %d)\n", MAX_NOTES);
 
+    // full display width: a 20-char note fits a 21-col row untruncated
+    h.apply_display_cmd("{\"text\":\"abcdefghij0123456789\"}");
+    Capture cw; h.render(cw);
+    assert(strstr(cw.rows[1], "abcdefghij0123456789"));
+    printf("PASS 21-col width\n");
+
     // garbage JSON must be ignored, not crash or add junk
     uint8_t before = h.note_count();
     h.apply_display_cmd("not json at all");
