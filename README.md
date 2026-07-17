@@ -8,8 +8,8 @@ Cyclops dev unit on an Arduino Uno — deck edition. Two jobs, one breadboard:
    protocol and the exact same brain pipeline (transcriber → extractor →
    notes → HUD frames).
 2. **aion control deck** — the physical console for the
-   [aion](https://github.com/ilPez00/aion) cockpit TUI: two sticks, a
-   two thumb joysticks, four face buttons, a mode switch. In AION mode the deck
+   [aion](https://github.com/ilPez00/aion) cockpit TUI: two thumb
+   joysticks, four face buttons, a mode switch. In AION mode the deck
    navigates the cockpit one-handed; in APP mode it becomes a Linux gamepad
    (uinput "CyclUno Pad") driving whatever program aion spawned. The SPI TFT
    mirrors aion status. Jarvis, but with detents.
@@ -44,13 +44,13 @@ single-stick HUD.
 
 ![console layout](docs/img/deck-layout.svg)
 
-### Controls — AION mode (D13 off)
+### Controls — AION mode (A4 LED off)
 Local HUD: **stick 1 up/down** scrolls · **stick 1 right / SW** = A (REC
 toggle on HOME, select in MENU) · **stick 1 left / button B** = menu/back.
-Forwarded to the aion cockpit: **joy2** = navigate workspaces · X/Y pause/cancel
+Forwarded to the aion cockpit: **joy2** = navigate workspaces · **X** = pause ·
 **Y** = cancel · **stick 2 click** = activate.
 
-### Controls — APP mode (MODE button, D13 on)
+### Controls — APP mode (MODE button toggles, A4 LED on)
 The deck is a gamepad: **stick 2** = analog axes · **A/B/X/Y + both stick
 clicks + wheel click** = buttons · **joy2** = navigate. aion exposes it as a
 uinput device named "CyclUno Pad"; spawn a program (`run app mpv …`) and play.
