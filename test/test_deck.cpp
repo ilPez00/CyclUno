@@ -38,15 +38,49 @@ static void test_raw_stream() {
     printf("PASS raw axis streaming\n");
 }
 
+static void test_debounce() {
+    DebouncedButton b;
+    // stable press: exactly one +1 once the level has settled
+    assert(b.update(true, 0) == 0);                          // raw change, not settled
+    assert(b.update(true, DebouncedButton::SETTLE_MS - 1) == 0);
+    assert(b.update(true, DebouncedButton::SETTLE_MS) == 1);
+    assert(b.update(true, DebouncedButton::SETTLE_MS + 5) == 0);  // no repeat
+
+    // bouncy release: chatter restarts the settle window, single -1 at the end
+    assert(b.update(false, 100) == 0);
+    assert(b.update(true, 105) == 0);    // bounce back
+    assert(b.update(false, 110) == 0);   // bounce again
+    assert(b.update(false, 110 + DebouncedButton::SETTLE_MS - 1) == 0);
+    assert(b.update(false, 110 + DebouncedButton::SETTLE_MS) == -1);
+
+    // sub-settle glitch: a spike shorter than SETTLE_MS emits nothing
+    assert(b.update(true, 300) == 0);
+    assert(b.update(false, 305) == 0);
+    assert(b.update(false, 400) == 0);
+
+    // bouncy press: chatter during settle still yields exactly one +1
+    int presses = 0;
+    assert(b.update(true, 500) == 0);
+    assert(b.update(false, 503) == 0);
+    assert(b.update(true, 506) == 0);
+    for (unsigned long t = 507; t < 600; ++t)
+        if (b.update(true, t) == 1) ++presses;
+    assert(presses == 1);
+    printf("PASS debounce\n");
+}
+
 static void test_ram() {
     printf("sizeof(RawAxisStream)=%zu\n", sizeof(RawAxisStream));
     assert(sizeof(RawAxisStream) <= 16);   // host: 8-byte long + padding; AVR is smaller
+    printf("sizeof(DebouncedButton)=%zu\n", sizeof(DebouncedButton));
+    assert(sizeof(DebouncedButton) <= 16);
     printf("PASS RAM budget\n");
 }
 
 int main() {
     test_pack();
     test_raw_stream();
+    test_debounce();
     test_ram();
     printf("OK: deck logic host gate passed\n");
     return 0;

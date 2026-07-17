@@ -104,12 +104,11 @@ static void on_frame(uint8_t type, const uint8_t* p, size_t n, void*) {
 }
 
 // ---- input ------------------------------------------------------------
-// debounced active-low buttons: edge() returns +1 press, -1 release, 0 none
-static int8_t edge(uint8_t pin, uint8_t& state) {
-    bool low = digitalRead(pin) == LOW;
-    if (low && state == 0) { state = 1; return 1; }
-    if (!low && state == 1) { state = 0; return -1; }
-    return 0;
+// active-low buttons through DebouncedButton (deck.h): +1 press, -1 release
+static cycluno::DebouncedButton btn_a, btn_b, btn_j2, btn_x, btn_y, btn_mode;
+
+static int8_t edge(uint8_t pin, cycluno::DebouncedButton& b, unsigned long now) {
+    return b.update(digitalRead(pin) == LOW, now);
 }
 
 static uint16_t joy_avg(uint8_t pin) {
@@ -191,9 +190,8 @@ void loop() {
     unsigned long now = millis();
 
     // ---- joy1 + A/B: local HUD in AION mode, gamepad buttons in APP mode
-    static uint8_t stA = 0, stB = 0;
-    int8_t eA = edge(PIN_BTN_A, stA);
-    int8_t eB = edge(PIN_BTN_B, stB);
+    int8_t eA = edge(PIN_BTN_A, btn_a, now);
+    int8_t eB = edge(PIN_BTN_B, btn_b, now);
     int8_t dy1 = joy1_y.update(analogRead(PIN_JOY1_Y), now);
     static int8_t x1_prev = 0;
     joy1_x.update(analogRead(PIN_JOY1_X), now);
@@ -231,14 +229,13 @@ void loop() {
             send_input(cycluno::SRC_JOY2, cycluno::CODE_RAW_Y, JOY_FLIP_Y ? -v : v);
     }
 
-    // ---- face buttons: J2 stick click, wheel click, X, Y
-    static uint8_t stJ2 = 0, stX = 0, stY = 0, stM = 0;
-    fwd_btn(edge(PIN_BTN_J2, stJ2), cycluno::DBTN_J2);
-    fwd_btn(edge(PIN_BTN_X, stX), cycluno::DBTN_X);
-    fwd_btn(edge(PIN_BTN_Y, stY), cycluno::DBTN_Y);
+    // ---- face buttons: J2 stick click, X, Y
+    fwd_btn(edge(PIN_BTN_J2, btn_j2, now), cycluno::DBTN_J2);
+    fwd_btn(edge(PIN_BTN_X, btn_x, now), cycluno::DBTN_X);
+    fwd_btn(edge(PIN_BTN_Y, btn_y, now), cycluno::DBTN_Y);
 
     // ---- MODE button: toggle personalities (never forwarded as a button)
-    if (edge(PIN_BTN_MODE, stM) > 0) { set_mode(!app_mode); moved = true; }
+    if (edge(PIN_BTN_MODE, btn_mode, now) > 0) { set_mode(!app_mode); moved = true; }
 
     // link LED: lit while frames arrived within the last 2 s
     digitalWrite(PIN_LED_LINK, (millis() - last_rx_ms < 2000) ? HIGH : LOW);

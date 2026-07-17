@@ -45,6 +45,35 @@ inline void pack_input_event(uint8_t src, uint8_t code, int16_t val,
     out[3] = (uint8_t)((val >> 8) & 0xFF);
 }
 
+// ---- debounced button -------------------------------------------------------
+// The old edge() helper claimed "debounced" but only tracked level flips: any
+// contact bounce spanning two loop iterations double-fired (machine-gun REC
+// toggles). Real debounce: a level change is accepted only once the raw input
+// has been stable for SETTLE_MS. Sub-settle glitches emit nothing.
+class DebouncedButton {
+public:
+    static const uint16_t SETTLE_MS = 20;
+
+    // Feed the raw level (true = pressed) + clock.
+    // Returns +1 on a settled press, -1 on a settled release, 0 otherwise.
+    int8_t update(bool pressed, unsigned long now_ms) {
+        if (pressed != raw_) { raw_ = pressed; settle_ms_ = now_ms; }
+        if (raw_ != state_ &&
+            (long)(now_ms - settle_ms_) >= (long)SETTLE_MS) {  // wrap-safe
+            state_ = raw_;
+            return state_ ? 1 : -1;
+        }
+        return 0;
+    }
+
+    bool pressed() const { return state_; }
+
+private:
+    bool raw_ = false;
+    bool state_ = false;
+    unsigned long settle_ms_ = 0;
+};
+
 // ---- APP-mode raw axis streaming -------------------------------------------
 // Decides when a raw axis reading is worth a frame: on meaningful change
 // (> STEP counts) or on returning to center, rate-limited to MIN_INTERVAL_MS.
