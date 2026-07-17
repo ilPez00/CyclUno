@@ -16,6 +16,13 @@ CyclUno is the **aion control deck**: a two-thumb, one-handed cockpit console.
   NAME + 1-line context (top row), since 13 workspaces need constant orientation.
 - **MODE** must be a physical slide/rocker with detent, NOT a held button
   (context flip you can feel without looking).
+  **RESOLVED (2026-07-17, research-backed):** part = **MTS-103** mini toggle,
+  SPDT ON-OFF-ON (AION/OFF/APP), panel-mount M6×0.75 bushing + 2.4 mm keyway
+  (see docs/reference/palm-deck-research.md §4). Solder-lug part — the
+  breadboard dev unit keeps the momentary button on D2. Firmware 3-pos read
+  (D2 + A5 INPUT_PULLUP, center-off = neither low) is DEFERRED: mode codes are
+  pinned byte-for-byte to aion's deck/protocol.py (0=AION 1=APP only), so an
+  OFF state is a cross-repo protocol change to coordinate with aion first.
 
 ## 2. Ergonomic rules (from HCI precedent)
 
@@ -72,6 +79,8 @@ is prototyped.
 | v0.5 | contoured shell + real-component holes | built, committed (b122cbe) |
 | v0.6 | thumb wells + counterbores + Uno standoffs | script only — never produced an FCStd: face-loft returned a Shell (booleans die), no `saveAs`, layout cut in the wrong quadrant, stick rake passed radians to a degrees API, buttons landed inside the joy2 well, display pocket still OLED |
 | v0.7 | TFT-era redesign: solid loft + hollow-by-cut, first-quadrant layout, offset sticks (rule 1), button diamond clear of wells, real Uno drill pattern on 6 mm floor standoffs, USB-B + jack wall cutouts, square ST7735 window, saveAs | built, FCStd saved — TFT module dims are PLACEHOLDERS, measure before print |
+| v0.8–v10 | split Tray + TopShell, dims from pulled STEP models, counterbored top-down screws (concurrent Hermes line) | built, committed — tray outer is wider than the shell footprint at z=0, halves don't mate yet |
+| v11 | v10 + research-verified dims: MSP1443 landscape TFT pocket (29.7×43.36 PCB, 26.2×27.2 active window), MTS-103 M6+keyway MODE mount, FDM hole sizing (self-tap −0.25 / clearance +0.25 dia, wider bosses) | built, FCStd saved — TFT post pattern still UNDOCUMENTED by vendor, measure; tray/shell mate still open |
 
 > **Honesty note (v0.3):** the cutouts are coordinate-placed against a rectangle, not
 > derived from thumb-reach. It protects the breadboard and proves the cutout *set*,
