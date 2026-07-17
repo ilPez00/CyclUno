@@ -7,10 +7,10 @@
 //   HW-504 joystick 1 (nav):  VRy=A0, VRx=A1, SW=D4 (to GND, internal pullup)
 //   HW-504 joystick 2 (app):  VRy=A2, VRx=A3, SW=D8
 
-//   buttons: B/back=D5, MODE=D10, X=D11, Y=D12
-//   LEDs: REC=D6, link=D7, APP-mode=D13 (onboard)
+//   buttons: B/back=D5, MODE=D2, X=D3, Y=D12
+//   LEDs: REC=D6, link=D7, APP-mode=A4 (external; D13 is the SPI clock)
 //
-// Two personalities (MODE button toggles, D13 LED shows APP):
+// Two personalities (MODE button toggles, A4 LED shows APP):
 //   AION mode — joy1 + A/B drive the local HUD; joy2, X/Y are
 //     forwarded to the host as MSG_INPUT_EVENT frames (aion turns them into
 //     cockpit navigation: joy2=workspaces).
@@ -24,8 +24,8 @@
 // Event payloads are pinned byte-for-byte to aion/src/aion/deck/protocol.py
 // (host gate: test/test_deck.cpp).
 //
-// RAM: UnoHud 160 B, FrameDecoder 262 B, 4x JoyAxis + 2x RawAxisStream +
-// QuadDecoder < 60 B — comfortably inside the ATmega328P's 2 KB.
+// RAM: UnoHud 160 B, FrameDecoder 262 B, 4x JoyAxis + 2x RawAxisStream
+// < 100 B — comfortably inside the ATmega328P's 2 KB.
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7735.h>
@@ -95,7 +95,7 @@ static unsigned long last_rx_ms = 0;
 
 static void on_frame(uint8_t type, const uint8_t* p, size_t n, void*) {
     last_rx_ms = millis();
-    char tmp[64];  // notes are <= 21 chars on this display; clamp hard
+    char tmp[64];  // HUD rows hold 16 chars; clamp the JSON payload hard
     if (n >= sizeof(tmp)) n = sizeof(tmp) - 1;
     memcpy(tmp, p, n); tmp[n] = 0;
     if (type == cyclops::MSG_DISPLAY_CMD || type == cyclops::MSG_NOTE) {

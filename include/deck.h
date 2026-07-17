@@ -1,7 +1,7 @@
 // Deck — CyclUno as aion's physical console: second stick, extra buttons,
 // and a mode switch.
 //
-// Two modes, toggled by the MODE button (D10):
+// Two modes, toggled by the MODE button (D2):
 //   AION: joy1 + A/B drive the local HUD as before; joy2, X/Y and the face
 //         buttons are forwarded to the host as MSG_INPUT_EVENT frames — aion
 //         turns them into navigation Intents.

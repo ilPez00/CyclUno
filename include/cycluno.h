@@ -8,8 +8,8 @@
 //   sizeof(UnoHud) is gated < 400 bytes by test_cycluno.cpp.
 //
 // Rendering is abstracted as "N text rows" (RowSink) so the logic is
-// host-testable; the Uno maps rows onto a text-mode SSD1306 (no framebuffer),
-// the host test captures strings. Wire protocol is the shared v2 framing
+// host-testable; the Uno maps rows onto the SPI TFT (row-rect redraws, no
+// framebuffer), the host test captures strings. Wire protocol is the shared v2 framing
 // (cyclops_shared.h) over USB serial — same frames the XIAO speaks over BLE.
 #pragma once
 #include <stdint.h>
@@ -18,8 +18,9 @@
 
 namespace cycluno {
 
-static const uint8_t ROWS = 16;       // 128x128 OLED, 8x8 font -> 16 text rows
-static const uint8_t COLS = 16;       // 128 px / 8 px font
+static const uint8_t ROWS = 16;       // 128x128 TFT, 8 px rows -> 16 text rows
+static const uint8_t COLS = 16;       // GFX font is 6 px wide: 16 cols = 96 px
+                                      // (21 cols would fit; kept 16 for RAM)
 static const uint8_t MAX_NOTES = 12;
 static const uint8_t NOTE_LEN = COLS; // one row per note
 

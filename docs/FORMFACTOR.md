@@ -65,10 +65,13 @@ is prototyped.
 
 | Ver | Form | State |
 |-----|------|-------|
-| v0.1 |矩形 slab, OLED+stick+button holes | built, saved |
+| v0.1 | rectangular slab, OLED+stick+button holes | built, saved |
 | v0.2 | slab + 4 standoffs + screw-on lid | built, committed (14bae91) |
 | v0.3 | TIER B slab: raked sticks + MODE slot + rounded grip (coordinate-placed, NOT ergo-derived) | built, committed (ae5e340) — DEV ENCLOSURE, not final form |
 | v0.4 | TIER A Palm Deck — layout DERIVED from hand envelope (thumb-pad centers, sight-line OLED, detent MODE) | built, committed — hand metrics are AVG (parameterize w/ real) |
+| v0.5 | contoured shell + real-component holes | built, committed (b122cbe) |
+| v0.6 | thumb wells + counterbores + Uno standoffs | script only — never produced an FCStd: face-loft returned a Shell (booleans die), no `saveAs`, layout cut in the wrong quadrant, stick rake passed radians to a degrees API, buttons landed inside the joy2 well, display pocket still OLED |
+| v0.7 | TFT-era redesign: solid loft + hollow-by-cut, first-quadrant layout, offset sticks (rule 1), button diamond clear of wells, real Uno drill pattern on 6 mm floor standoffs, USB-B + jack wall cutouts, square ST7735 window, saveAs | built, FCStd saved — TFT module dims are PLACEHOLDERS, measure before print |
 
 > **Honesty note (v0.3):** the cutouts are coordinate-placed against a rectangle, not
 > derived from thumb-reach. It protects the breadboard and proves the cutout *set*,
