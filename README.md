@@ -61,9 +61,28 @@ centers. If a direction feels flipped for your module's mounting, set
 
 ## Build + flash
 ```
-make test     # host gate: HUD logic + joystick nav + deck logic, plain g++
+make test     # host gate: HUD logic + joystick nav + deck logic + wire contract
 make build    # pio run -e cycluno
 make flash    # pio run -e cycluno -t upload
+```
+
+`make test` ends with a **wire-contract gate**: `src/main.cpp` must still
+reference `cyclops_shared.h` / `encode_frame` / `MSG_INPUT_EVENT`. The library
+tests cover `include/*.h` (Arduino-free, host-compilable); `main.cpp` is not,
+so it was the one file nothing guarded — and it is the file that owns the link
+to aion. A `main.cpp` that stops emitting frames leaves `DeckLink` alive but
+deaf, with no error anywhere.
+
+### The other firmware: `mouse`
+`src/mouse.cpp` is a **separate, simpler build** — one joystick + one button +
+an MPU6050, no display, plain ASCII lines (`M dx dy`, `L 1/0`, `G <n>`) at
+115200. It is a standalone HID-style pointer, **not** a deck: it does not speak
+the framed protocol and aion cannot drive it. Own wiring
+([docs/WIRING-MOUSE.md](docs/WIRING-MOUSE.md) — MPU6050 on A4/A5, joystick on
+A0/A1/D2, button D3), own env.
+
+```
+make mouse    # pio run -e mouse -t upload && monitor
 ```
 
 ## Run the wired brain
