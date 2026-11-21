@@ -1,0 +1,5 @@
+NOTICE — third-party components
+
+Original work (device code, simulator, CLI and protocol glue) is MIT licensed (see LICENSE).
+Arduino core, joystick/OLED/SPI libraries and toolchains keep their own licenses.
+Copyright (c) 2026 Giovanni Antonio Pezzin.
